@@ -1,5 +1,11 @@
 package entities;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Address {
 
 	private String street;
@@ -7,7 +13,20 @@ public class Address {
 	private String state;
 	private String zipCode;
 	private String country;
-	//ychg
+	
+	// making connection
+	try {
+	Connection connect = DriverManager.getConnection("jdbc:mysql://cse.unl.edu/ajayswal", "ajayswal",
+			"Shivbaba98853#");
+
+	PreparedStatement ps = null;
+	
+	} catch(Exception e) {
+		e.printStackTrace();
+	}
+	
+	
+	
 	
 	public Address(String street, String city, String state, String zipCode, String country) {
 		this.street = street;

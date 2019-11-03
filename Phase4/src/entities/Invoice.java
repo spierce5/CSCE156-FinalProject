@@ -130,6 +130,12 @@ public class Invoice {
  * Takes an array of invoices and prints a summary 
  */
 	public void PrintSummary(ArrayList<Invoice> list) {
+		double subTotal1 = 0;
+		double subTotal2 = 0;
+		double subTotal3 = 0;
+		double subTotal4 = 0;
+		double subTotal5 = 0;
+		
 		System.out.println(String.format("%-10s %-30s %-20s %-16s %-12s %-12s %-12s %-12s", "Invoice",
 				"Customer", "Realtor", "Subtotal", "Fees", "Tax", "Discount", "Total"));
 		for(Invoice Inv: list) {
@@ -150,7 +156,17 @@ public class Invoice {
 			System.out.println(String.format("%-10s %-30s %-20s $%-16.2f %-12s $%-12.2f %-12s $%-12.2f", Inv.getInvoiceCode(),
 					Inv.getCustomer().getName(), Inv.getLandlord().getFullName(), Inv.getSubtotal(Inv.getProducts()),
 					fees, Inv.getTax(Inv.getProducts()), discount , Inv.getTotal(Inv.getProducts(),Inv.getCustomer())));
+			
+			subTotal1 += Inv.getSubtotal(Inv.getProducts());
+			subTotal2 += fees;
+			subTotal3 += Inv.getTax(Inv.getProducts());
+			subTotal4 += Inv.getDiscount(Inv.getProducts(), lowIncome, housingCredit);
+			subTotal5 += Inv.getTotal(Inv.getProducts(),Inv.getCustomer());
+			
 		}
+		System.out.println("==============================================================================================================================");
+		
+		System.out.printf("Total %52s %.2f %8s %.2f %6s %.2f %5s %.2f %2s %.2f\n", "$", subTotal1, "$",subTotal2, "$",subTotal3, "$",subTotal4, "$",subTotal5);
 	}
 		
 /*
