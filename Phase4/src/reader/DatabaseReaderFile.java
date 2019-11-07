@@ -13,6 +13,8 @@ import com.mysql.jdbc.PreparedStatement;
 import entities.*;
 
 public class DatabaseReaderFile {
+	
+	//connecting eclipse and database
 	static Connection connect = null;
 	Statement stat = null;
 
@@ -21,7 +23,7 @@ public class DatabaseReaderFile {
 	static final String username = "ajayswal";
 	static final String password = "Shivbaba98853#";
 
-	// method
+	// method  to connect to JDBC and checking for errors
 	public void ConnectionToJdbc() {
 		try {
 			Class.forName(driverJDBC);
@@ -45,12 +47,14 @@ public class DatabaseReaderFile {
 		}
 	}
 
+	//array list of person gives a list of all the person in the data
 	public ArrayList<Person> readPersons() {
 		ArrayList<Person> people = new ArrayList<Person>();
 		String query1;
 		query1 = "SELECT * from Person";
 		Statement stat1;
 
+		//
 		try {
 			stat1 = connect.createStatement();
 			ResultSet rs = stat1.executeQuery(query1);
@@ -204,6 +208,64 @@ public class DatabaseReaderFile {
 		}
 
 		return person1;
+	}
+	
+	// database for product
+	public ArrayList<Product> readProduct(){
+		
+		ArrayList<Customer> customers = new ArrayList<Customer>();
+
+		String query1;
+		query1 = "SELECT * from Product";
+		
+		try {
+
+			Statement stat = connect.createStatement();
+			ResultSet rs = stat.executeQuery(query1);
+
+			while (rs.next()) {
+				
+				
+				
+				}
+			}  catch (Exception e) {
+
+				e.printStackTrace();
+
+			}
+		
+		
+	}
+	
+	public Product product(int ProductId, int ProductCode, String ProductType) {
+		
+		PreparedStatement stat = null;
+		Person person1 = null;
+
+		try {
+
+			stat = (PreparedStatement) connect.prepareStatement("SELECT * from Product where ProductId = ? AND ProductCode = ? AND ProductType = ?");
+			stat.setInt(1, ProductId);
+			stat.setString(3, ProductType);
+			
+			//for Amenity
+			if (ProductType.equals("A")) {
+				
+			}
+
+			ResultSet rs = stat.executeQuery();
+			while (rs.next()) {
+				
+				}
+			} catch (Exception e) {
+
+				e.printStackTrace();
+
+			}
+
+		
+		
+		return null;
 	}
 
 }
