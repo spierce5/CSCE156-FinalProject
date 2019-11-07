@@ -14,19 +14,6 @@ public class Address {
 	private String zipCode;
 	private String country;
 	
-	// making connection
-	try {
-	Connection connect = DriverManager.getConnection("jdbc:mysql://cse.unl.edu/ajayswal", "ajayswal",
-			"Shivbaba98853#");
-
-	PreparedStatement ps = null;
-	
-	} catch(Exception e) {
-		e.printStackTrace();
-	}
-	
-	
-	
 	
 	public Address(String street, String city, String state, String zipCode, String country) {
 		this.street = street;
