@@ -133,8 +133,8 @@ public class FlatFileReader {
 
 				String la = token[4];
 				Address leaseAddress = new Address(la);
-				double cost = Double.parseDouble(token[6]);
-				double deposit = Double.parseDouble(token[7]);
+				double cost = Double.parseDouble(token[7]);
+				double deposit = Double.parseDouble(token[6]);
 				LeaseAgreements a = new LeaseAgreements(token[0], token[1], leaseStartDate, leaseEndDate, leaseAddress, customerMap.get(token[5]), cost, deposit);
 				productMap.put(token[0], a);
 				products.add(a);
@@ -176,6 +176,9 @@ public class FlatFileReader {
 		ArrayList<String> data = new ArrayList<String>();
 		ArrayList<Invoice> invoices = new ArrayList<Invoice>();
 		DateTimeFormatter dTF = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		boolean apartmentAssociation = false;
+		boolean leaseAssociation = false;
+		boolean amenityAssociation = false;
 
 		Scanner sc = null;
 		try {
@@ -189,7 +192,7 @@ public class FlatFileReader {
 		}
 		
 		data.remove(0);	
-		for(String item: data) {
+		for(String item: data) {		
 			String token[] = item.split(";");
 			LocalDate date = LocalDate.parse(token[3], dTF);
 			

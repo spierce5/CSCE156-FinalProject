@@ -37,7 +37,7 @@ public class ParkingPass extends Product{
  * Calculates tax on all parking passes
  */
 	public double calculateTax(Customer customer, LocalDate date) {
-	    if(customer instanceof LowIncome) {
+	    if(customer.isLowIncome()) {
 	    	return 0;
 	    }
 	    else {

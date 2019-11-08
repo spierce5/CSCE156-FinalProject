@@ -103,7 +103,7 @@ public class SaleAgreements extends Product {
  * Returns tax on all units
  */
 	public double calculateTax(Customer customer, LocalDate date) {
-		if(customer instanceof LowIncome) {
+		if(customer.isLowIncome()) {
 			return 0;
 		}
 		else {

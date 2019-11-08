@@ -82,121 +82,201 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="10">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="11" name="customerName"/>      
-      <multiplicity id="12" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="13">    
-    <bendpoint x="1500" y="584"/>    
-    <bendpoint x="320" y="576"/>    
+  <dependency id="10">    
     <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
-  <association id="14">    
-    <bendpoint x="1472" y="212"/>    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="15" name="address"/>      
-      <multiplicity id="16" minimum="0" maximum="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <association id="12">    
+    <bendpoint x="472" y="1144"/>    
+    <bendpoint x="1784" y="1144"/>    
+    <bendpoint x="1784" y="428"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="13" name="address">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="14" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="17">    
-    <bendpoint x="1014" y="450"/>    
-    <bendpoint x="1620" y="448"/>    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="18" name="address"/>      
-      <multiplicity id="19" minimum="0" maximum="1"/>    
+  <association id="15">    
+    <bendpoint x="1030" y="542"/>    
+    <bendpoint x="1672" y="542"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="16" name="address">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="17" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="20">    
-    <bendpoint x="422" y="186"/>    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="21" name="products"/>      
-      <multiplicity id="22" minimum="0" maximum="2147483647"/>    
+  <association id="18">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="19" name="apartmentCode"/>      
+      <multiplicity id="20" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="23">    
-    <bendpoint x="596" y="-8"/>    
-    <bendpoint x="1372" y="-8"/>    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="24" name="landlord"/>      
-      <multiplicity id="25" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="26">    
+  <dependency id="21">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <generalization id="22">    
     <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="2"/>  
   </generalization>  
-  <generalization id="27">    
-    <bendpoint x="504" y="610"/>    
-    <bendpoint x="238" y="610"/>    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
-  <association id="28">    
-    <bendpoint x="1138" y="202"/>    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="29" name="contact"/>      
-      <multiplicity id="30" minimum="0" maximum="1"/>    
+  <dependency id="23">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <association id="24">    
+    <bendpoint x="472" y="1116"/>    
+    <bendpoint x="1176" y="1120"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="25" name="houseParking">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="26" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="31">    
+  <dependency id="27">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <association id="28">    
     <bendpoint x="742" y="208"/>    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="32" name="customer"/>      
-      <multiplicity id="33" minimum="0" maximum="1"/>    
+      <attribute id="29" name="customer">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="30" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="34">    
+  <dependency id="31">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <generalization id="32">    
     <bendpoint x="1168" y="606"/>    
     <bendpoint x="284" y="592"/>    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="2"/>  
   </generalization>  
-  <association id="35">    
-    <bendpoint x="1030" y="542"/>    
-    <bendpoint x="1672" y="542"/>    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="36" name="address"/>      
-      <multiplicity id="37" minimum="0" maximum="1"/>    
+  <association id="33">    
+    <bendpoint x="596" y="-8"/>    
+    <bendpoint x="1372" y="-8"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="34" name="landlord">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="35" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
+    <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <dependency id="36">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="37">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
   <association id="38">    
-    <bendpoint x="472" y="1144"/>    
-    <bendpoint x="1784" y="1144"/>    
-    <bendpoint x="1784" y="428"/>    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="39" name="address"/>      
-      <multiplicity id="40" minimum="0" maximum="1"/>    
+    <bendpoint x="1472" y="212"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="39" name="address">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="40" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="41">    
-    <bendpoint x="472" y="1116"/>    
-    <bendpoint x="1176" y="1120"/>    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="42" name="houseParking"/>      
-      <multiplicity id="43" minimum="0" maximum="1"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="42" name="customerName">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="43" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="44">    
+    <bendpoint x="1138" y="202"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="45" name="contact">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="46" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="47">    
+    <bendpoint x="504" y="610"/>    
+    <bendpoint x="238" y="610"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="48">    
+    <bendpoint x="1500" y="584"/>    
+    <bendpoint x="320" y="576"/>    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="49">    
+    <bendpoint x="1014" y="450"/>    
+    <bendpoint x="1620" y="448"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="50" name="address">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="51" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="52">    
+    <bendpoint x="422" y="186"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="53" name="products">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="54" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 

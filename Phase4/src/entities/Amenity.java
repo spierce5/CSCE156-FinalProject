@@ -37,7 +37,7 @@ public class Amenity extends Product{
  * returns tax based on income
  */
 	public double calculateTax(Customer customer, LocalDate date) {
-		if(customer instanceof LowIncome) {
+		if(customer.isLowIncome()) {
 			return 0;
 		}
 		else {

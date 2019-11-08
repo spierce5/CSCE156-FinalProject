@@ -10,7 +10,9 @@ public class Invoice {
 	private LocalDate date;
 	private ArrayList<Product> products;
 	private double fees;
-	private boolean housingCredit = false;
+	private boolean apartmentAssociation = false;
+	private boolean leaseAssociation = false;
+	private boolean amenityAssociation = false;
 	
 
 	
@@ -21,14 +23,54 @@ public class Invoice {
 		this.landlord = landlord;
 		this.date = date;
 		this.products = products;
+		for(Product p: products) {
+			if(p instanceof LeaseAgreements) {
+				this.apartmentAssociation = true;
+				this.leaseAssociation = true;
+			}
+			else if(p instanceof SaleAgreements) {
+				this.apartmentAssociation = true;
+			}
+			else if(p instanceof Amenity) {
+				this.amenityAssociation = true;
+			}
+		}
 	}
 /*
  * Getter and Setter Methods 
  */
+	
+	
 	public String getInvoiceCode() {
 		return invoiceCode;
 	}
 	
+	public boolean isAmenityAssociation() {
+		return amenityAssociation;
+	}
+
+
+	public void setAmenityAssociation(boolean amenityAssociation) {
+		this.amenityAssociation = amenityAssociation;
+	}
+
+
+	public boolean isApartmentAssociation() {
+		return apartmentAssociation;
+	}
+
+	public void setApartmentAssociation(boolean apartmentAssociation) {
+		this.apartmentAssociation = apartmentAssociation;
+	}
+
+	public boolean isLeaseAssociation() {
+		return leaseAssociation;
+	}
+
+	public void setLeaseAssociation(boolean leaseAssociation) {
+		this.leaseAssociation = leaseAssociation;
+	}
+
 	public void setInvoiceCode(String invoiceCode) {
 		this.invoiceCode = invoiceCode;
 	}
@@ -86,7 +128,7 @@ public class Invoice {
 /*
  * Calculates tax based on income level	
  */
-	public double getTax(ArrayList<Product> products) {
+	public double getTotalTax(ArrayList<Product> products) {
 			double totalTax = 0;
 			for(Product p: products) {
 				totalTax += p.calculateTax(customer, date);
@@ -94,20 +136,27 @@ public class Invoice {
 			return totalTax;
 	}
 /*
- * Calculates total after taxes and discount
- */
-	public double getTotal(ArrayList<Product> products, Customer customer) {
+* Calculates total after tax and before discount
+*/
+	public double totalAfterTax(ArrayList<Product> products, Customer customer) {
 		double Total = 0;
 		for(Product p: products) {
-			Total += p.calculateTotalCost(customer, date);
-		}
-		if(customer.isLowIncome()) {
-			Total *= 0.9;
-			Total += 50.75;
-			if(housingCredit) {
-				Total -= 1000;
+			if(p instanceof Amenity && leaseAssociation == true) {
+				Total += (p.calculateTotalCost(customer, date) * 0.95);
+			}
+			else {
+				Total += p.calculateTotalCost(customer, date);
 			}
 		}
+		return Total;
+	}
+/*
+ * Calculates total after taxes and discount
+ */
+	public double totalAfterDiscount(ArrayList<Product> products, Customer customer) {
+		double Total = 0;
+		Total = totalAfterTax(products, customer);
+		Total += getDiscount(products, customer.isLowIncome(), apartmentAssociation);
 		return Total;
 	}
 /*
@@ -116,7 +165,7 @@ public class Invoice {
 	public double getDiscount(ArrayList<Product> products, boolean incomeDiscount, boolean housingDiscount) {
 		double discount = 0;
 		if(incomeDiscount) {
-			discount = getTotal(products, customer) * 0.1;
+			discount = totalAfterTax(products, customer) * 0.1;
 			if(housingDiscount) {
 				discount += 1000;
 			}
@@ -142,7 +191,8 @@ public class Invoice {
 				fees = 50.75;
 				for(Product p: Inv.getProducts()) {
 					if(p instanceof SaleAgreements || p instanceof LeaseAgreements) {
-						housingCredit = true;
+						//apartmentAssociation = true;
+						Inv.leaseAssociation = true;
 					}
 				}
 			}
@@ -150,16 +200,16 @@ public class Invoice {
 				fees = 0.0;
 			}
 			
-			String discount = String.format("%.2f", Inv.getDiscount(Inv.getProducts(), Inv.getCustomer().isLowIncome(), housingCredit));
+			String discount = String.format("%.2f", Inv.getDiscount(Inv.getProducts(), Inv.getCustomer().isLowIncome(), apartmentAssociation));
 			System.out.println(String.format("%-10s %-30s %-20s $%-16.2f %-12s $%-12.2f %-12s $%-12.2f", Inv.getInvoiceCode(),
 					Inv.getCustomer().getName(), Inv.getLandlord().getFullName(), Inv.getSubtotal(Inv.getProducts()),
-					fees, Inv.getTax(Inv.getProducts()), discount , Inv.getTotal(Inv.getProducts(),Inv.getCustomer())));
+					fees, Inv.getTotalTax(Inv.getProducts()), discount , Inv.totalAfterDiscount(Inv.getProducts(),Inv.getCustomer())));
 			
 			subTotal1 += Inv.getSubtotal(Inv.getProducts());
 			subTotal2 += fees;
-			subTotal3 += Inv.getTax(Inv.getProducts());
-			subTotal4 += Inv.getDiscount(Inv.getProducts(), Inv.getCustomer().isLowIncome(), housingCredit);
-			subTotal5 += Inv.getTotal(Inv.getProducts(),Inv.getCustomer());
+			subTotal3 += Inv.getTotalTax(Inv.getProducts());
+			subTotal4 += Inv.getDiscount(Inv.getProducts(), Inv.getCustomer().isLowIncome(), apartmentAssociation);
+			subTotal5 += Inv.totalAfterDiscount(Inv.getProducts(),Inv.getCustomer());
 			
 		}
 		System.out.println("==============================================================================================================================");
@@ -175,7 +225,7 @@ public class Invoice {
 		System.out.println("==================================================");
 		for(Invoice Inv: list) {
 			String customerType = null;
-			housingCredit = false;
+			apartmentAssociation = false;
 			if(Inv.getCustomer().isLowIncome()) {			//Printable version of customer type
 				customerType = "[Low-Income]";
 			}
@@ -199,7 +249,7 @@ public class Invoice {
 				case "S":
 					SaleAgreements sa = (SaleAgreements) p;
 					if(Inv.getCustomer().isLowIncome()) {				//Applies housing credit due to SaleAgreement
-						housingCredit = true;
+						apartmentAssociation = true;
 					}
 					String interest = String.format("%.2f", sa.calculateInterest(Inv.getDate()));
 					item.append("Sale Agreement @ " + sa.getAddress().getStreet());
@@ -208,7 +258,7 @@ public class Invoice {
 				case "L":
 					LeaseAgreements la = (LeaseAgreements) p;
 					if(Inv.getCustomer().isLowIncome()) {				//Applies housing credit due to LeaseAgreement
-						housingCredit = true;
+						apartmentAssociation = true;
 					}
 					String price = String.format("%.2f", la.getPricePerApartment());
 					item.append("Lease Agreement @ " + la.getAddress().getStreet());
@@ -228,7 +278,12 @@ public class Invoice {
 				case "A":
 					Amenity am = (Amenity) p;
 					String unitPrice = String.format("%.2f", am.getPrice());
-					item.append(am.getName() + " (" + am.getQuantity() + " Units @ $" + unitPrice + " /Unit)");
+					if(Inv.amenityAssociation && Inv.leaseAssociation) {
+						item.append(am.getName() + " (" + am.getQuantity() + " Units @ $" + unitPrice + " /Unit with 5% off)");
+					}
+					else {
+						item.append(am.getName() + " (" + am.getQuantity() + " Units @ $" + unitPrice + " /Unit)");
+					}
 					break;
 				}
 				System.out.println(String.format("%-12s %-60s %-15.2f %-15.2f %-15.2f", p.getProductCode(),
@@ -238,16 +293,17 @@ public class Invoice {
 				}
 			}
 			System.out.println(String.format("%-72s %-45s", " ", "======================================"));
-			System.out.println(String.format("%-72s %-15.2f %-15.2f %-15.2f", "SUBTOTALS", Inv.getSubtotal(Inv.getProducts()), Inv.getTax(Inv.getProducts()), Inv.getTotal(Inv.getProducts(), Inv.getCustomer())));
-			if(housingCredit) {
-				System.out.println(String.format("%-105s %-15.2f", "DISCOUNT (10% LOW INCOME + $1000 HOUSING CREDIT)", Inv.getDiscount(Inv.getProducts(), Inv.getCustomer().isLowIncome(), housingCredit)));
+			System.out.println(String.format("%-72s %-15.2f %-15.2f %-15.2f", "SUBTOTALS", Inv.getSubtotal(Inv.getProducts()), Inv.getTotalTax(Inv.getProducts()), Inv.totalAfterTax(Inv.getProducts(), Inv.getCustomer())));
+			if(apartmentAssociation) {
+				System.out.println(String.format("%-105s %-15.2f", "DISCOUNT (10% LOW INCOME + $1000 HOUSING CREDIT)", Inv.getDiscount(Inv.getProducts(), Inv.getCustomer().isLowIncome(), apartmentAssociation)));
 			}
 			else if(Inv.getCustomer().isLowIncome()) {
-				System.out.println(String.format("%-105s %-15.2f", "DISCOUNT (10% LOW INCOME)", Inv.getDiscount(Inv.getProducts(), true, housingCredit)));
+				System.out.println(String.format("%-105s %-15.2f", "DISCOUNT (10% LOW INCOME)", Inv.getDiscount(Inv.getProducts(), true, apartmentAssociation)));
 			}
 			if(Inv.getCustomer().isLowIncome()) {
 				System.out.println(String.format("%-105s %-15.2f", "Additional Fee (Low-Income)", 50.75));
-			}	
+			}
+			System.out.println(String.format("%-105s %-15.2f", "Total", Inv.totalAfterDiscount(Inv.getProducts(), Inv.getCustomer())));
 		}	
 	}
 }

@@ -79,8 +79,6 @@ public class LeaseAgreements extends Product {
  * Returns subtotal dependent on full or partial month, quantity, and fees
  */	
 	public double calculateSubtotal(Customer customer, LocalDate date) {
-		Period timeBetweenStart = Period.between(startDate, date);
-		Period timeBetweenEnd = Period.between(endDate, date);
 		int adjustedStart = startDate.getMonth().maxLength() - startDate.getDayOfMonth();
 		int adjustedEnd = endDate.getDayOfMonth();
 		
@@ -89,7 +87,7 @@ public class LeaseAgreements extends Product {
 			subtotal =  (pricePerApartment + ((adjustedStart / startDate.getMonth().maxLength()) * pricePerApartment) + deposit) * quantity ;
 		}//TO-DO:: fix algorithm
 		else if(endDate.getYear() == date.getYear() && endDate.getMonth().equals(date.getMonth())) {
-			subtotal = pricePerApartment - (timeBetweenEnd.getDays() * (pricePerApartment / date.getMonth().maxLength()));
+			subtotal = (pricePerApartment * (adjustedEnd / endDate.getMonth().maxLength()) * quantity);
 		}
 		else {
 			subtotal = pricePerApartment;
