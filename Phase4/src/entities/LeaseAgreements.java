@@ -10,15 +10,17 @@ public class LeaseAgreements extends Product {
 	private Address address;
 	private Customer customerName;
 	private double pricePerApartment;
+	private double deposit; 
 
 	public LeaseAgreements(String productCode, String productType, LocalDate startDate, LocalDate endDate,
-			Address address, Customer customerName, double pricePerApartment) {
+			Address address, Customer customerName, double pricePerApartment, double deposit) {
 		super(productCode, productType);
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.address = address;
 		this.customerName = customerName;
 		this.pricePerApartment = pricePerApartment;
+		this.deposit = deposit;
 	}
 
 	public LocalDate getStartDate() {
@@ -65,30 +67,28 @@ public class LeaseAgreements extends Product {
  * calculates tax on all Lease Agreements
  */
 	public double calculateTax(Customer customer, LocalDate date) {
-		if(customer instanceof LowIncome) {
+		if(customer.isLowIncome()) {
 			return 0;
 		}
 		else {
-			return calculateSubtotal(customer) * 0.06;
+			return calculateSubtotal(customer, date) * 0.06;
 		}
 	}
-/*
- * This method has been overloaded
- */
-	public double calculateSubtotal(Customer customer) {
-		return 0;
-	}
+
 /*
  * Returns subtotal dependent on full or partial month, quantity, and fees
  */	
 	public double calculateSubtotal(Customer customer, LocalDate date) {
 		Period timeBetweenStart = Period.between(startDate, date);
 		Period timeBetweenEnd = Period.between(endDate, date);
+		int adjustedStart = startDate.getMonth().maxLength() - startDate.getDayOfMonth();
+		int adjustedEnd = endDate.getDayOfMonth();
+		
 		double subtotal = 0;
-		if(timeBetweenStart.getMonths() < 1) {
-			subtotal =  pricePerApartment - (timeBetweenStart.getDays() * (pricePerApartment / date.getMonth().maxLength()));
-		}
-		else if(timeBetweenEnd.getMonths() < 1) {
+		if(startDate.getYear() == (date.getYear()) && startDate.getMonth().equals(date.getMonth())) {
+			subtotal =  (pricePerApartment + ((adjustedStart / startDate.getMonth().maxLength()) * pricePerApartment) + deposit) * quantity ;
+		}//TO-DO:: fix algorithm
+		else if(endDate.getYear() == date.getYear() && endDate.getMonth().equals(date.getMonth())) {
 			subtotal = pricePerApartment - (timeBetweenEnd.getDays() * (pricePerApartment / date.getMonth().maxLength()));
 		}
 		else {

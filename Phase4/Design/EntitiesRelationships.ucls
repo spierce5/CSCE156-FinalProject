@@ -1,216 +1,237 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.3" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="entities.LowIncome" project="phase2" 
-    file="/phase2/Phase2/src/entities/LowIncome.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="376" y="296"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
-      <operations public="false" package="false" protected="false" private="false" static="false"/>    
-    </display>  
-  </class>  
-  <class id="2" language="java" name="entities.Invoice" project="phase2" file="/phase2/Phase2/src/entities/Invoice.java" 
+  <class id="1" language="java" name="entities.Invoice" project="phase2" file="/phase2/src/entities/Invoice.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="233" y="100"/>    
+    <position height="-1" width="-1" x="238" y="164"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="entities.SaleAgreements" project="phase2" 
-    file="/phase2/Phase2/src/entities/SaleAgreements.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="69" y="441"/>    
+  <class id="2" language="java" name="entities.SaleAgreements" project="phase2" 
+    file="/phase2/src/entities/SaleAgreements.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="76" y="458"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="entities.Customer" project="phase2" 
-    file="/phase2/Phase2/src/entities/Customer.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="334" y="201"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
-      <operations public="false" package="false" protected="false" private="false" static="false"/>    
-    </display>  
-  </class>  
-  <class id="5" language="java" name="entities.StandardCustomer" project="phase2" 
-    file="/phase2/Phase2/src/entities/StandardCustomer.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="503" y="296"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
-      <operations public="false" package="false" protected="false" private="false" static="false"/>    
-    </display>  
-  </class>  
-  <class id="6" language="java" name="entities.Amenity" project="phase2" file="/phase2/Phase2/src/entities/Amenity.java" 
+  <class id="3" language="java" name="entities.Customer" project="phase2" file="/phase2/src/entities/Customer.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="433" y="441"/>    
+    <position height="-1" width="-1" x="421" y="231"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="entities.Address" project="phase2" file="/phase2/Phase2/src/entities/Address.java" 
+  <class id="4" language="java" name="entities.Amenity" project="phase2" file="/phase2/src/entities/Amenity.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="787" y="198"/>    
+    <position height="-1" width="-1" x="565" y="424"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="entities.Person" project="phase2" file="/phase2/Phase2/src/entities/Person.java" 
+  <class id="5" language="java" name="entities.Address" project="phase2" file="/phase2/src/entities/Address.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="646" y="200"/>    
+    <position height="-1" width="-1" x="730" y="241"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="entities.Product" project="phase2" file="/phase2/Phase2/src/entities/Product.java" 
+  <class id="6" language="java" name="entities.Person" project="phase2" file="/phase2/src/entities/Person.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="585" y="234"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="entities.Product" project="phase2" file="/phase2/src/entities/Product.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="65" y="200"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="entities.ParkingPass" project="phase2" 
-    file="/phase2/Phase2/src/entities/ParkingPass.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="330" y="441"/>    
+  <class id="8" language="java" name="entities.ParkingPass" project="phase2" 
+    file="/phase2/src/entities/ParkingPass.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="421" y="424"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="11" language="java" name="entities.LeaseAgreements" project="phase2" 
-    file="/phase2/Phase2/src/entities/LeaseAgreements.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="206" y="441"/>    
+  <class id="9" language="java" name="entities.LeaseAgreements" project="phase2" 
+    file="/phase2/src/entities/LeaseAgreements.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="246" y="433"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <generalization id="12">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="9"/>  
+  <generalization id="10">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
   </generalization>  
-  <association id="13">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="14" name="customer"/>      
-      <multiplicity id="15" minimum="0" maximum="1"/>    
+  <association id="11">    
+    <bendpoint x="168" y="200"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="12" name="products">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="13" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="16">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="17" name="products"/>      
-      <multiplicity id="18" minimum="0" maximum="2147483647"/>    
+  <association id="14">    
+    <bendpoint x="422" y="334"/>    
+    <bendpoint x="656" y="334"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="15" name="address">        
+        <position height="0" width="0" x="-57" y="43"/>      
+      </attribute>      
+      <multiplicity id="16" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
+    <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="19">    
-    <bendpoint x="646" y="101"/>    
+  <generalization id="17">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <association id="18">    
+    <bendpoint x="303" y="229"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="19" name="customer">        
+        <position height="0" width="0" x="87" y="30"/>      
+      </attribute>      
+      <multiplicity id="20" minimum="0" maximum="1">        
+        <position height="0" width="0" x="87" y="30"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="21">    
+    <bendpoint x="245" y="508"/>    
+    <bendpoint x="728" y="508"/>    
+    <bendpoint x="728" y="319"/>    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="22" name="address">        
+        <position height="0" width="0" x="-57" y="43"/>      
+      </attribute>      
+      <multiplicity id="23" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-57" y="43"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="24">    
+    <bendpoint x="148" y="527"/>    
+    <bendpoint x="782" y="526"/>    
+    <bendpoint x="782" y="330"/>    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="20" name="landlord"/>      
-      <multiplicity id="21" minimum="0" maximum="1"/>    
+      <attribute id="25" name="address">        
+        <position height="18" width="48" x="735" y="348"/>      
+      </attribute>      
+      <multiplicity id="26" minimum="0" maximum="1">        
+        <position height="16" width="23" x="787" y="350"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="27">    
+    <bendpoint x="564" y="347"/>    
+    <bendpoint x="368" y="347"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <association id="28">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="29" name="customerName">        
+        <position height="0" width="0" x="87" y="30"/>      
+      </attribute>      
+      <multiplicity id="30" minimum="0" maximum="1">        
+        <position height="0" width="0" x="87" y="30"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="31">    
+    <bendpoint x="149" y="520"/>    
+    <bendpoint x="421" y="520"/>    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="32" name="houseParking">        
+        <position height="0" width="0" x="91" y="-14"/>      
+      </attribute>      
+      <multiplicity id="33" minimum="0" maximum="1">        
+        <position height="0" width="0" x="91" y="-14"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="22">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="23" name="customerName"/>      
-      <multiplicity id="24" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="25">    
-    <bendpoint x="207" y="516"/>    
-    <bendpoint x="833" y="516"/>    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="26" name="address"/>      
-      <multiplicity id="27" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="28">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="9"/>  
-  </generalization>  
-  <association id="29">    
-    <bendpoint x="68" y="503"/>    
-    <bendpoint x="787" y="503"/>    
+  <association id="34">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="30" name="address"/>      
-      <multiplicity id="31" minimum="0" maximum="1"/>    
+      <attribute id="35" name="contact">        
+        <position height="0" width="0" x="-61" y="34"/>      
+      </attribute>      
+      <multiplicity id="36" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-61" y="34"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="32">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="4"/>  
-  </generalization>  
-  <association id="33">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="34" name="address"/>      
-      <multiplicity id="35" minimum="0" maximum="1"/>    
+  <association id="37">    
+    <bendpoint x="303" y="157"/>    
+    <bendpoint x="588" y="157"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="38" name="landlord">        
+        <position height="0" width="0" x="-61" y="34"/>      
+      </attribute>      
+      <multiplicity id="39" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-61" y="34"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="36">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="9"/>  
+  <generalization id="40">    
+    <bendpoint x="65" y="371"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="7"/>  
   </generalization>  
-  <generalization id="37">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="9"/>  
-  </generalization>  
-  <association id="38">    
-    <bendpoint x="335" y="143"/>    
-    <bendpoint x="785" y="145"/>    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="39" name="address"/>      
-      <multiplicity id="40" minimum="0" maximum="1"/>    
+  <association id="41">    
+    <bendpoint x="677" y="237"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="42" name="address">        
+        <position height="18" width="48" x="636" y="215"/>      
+      </attribute>      
+      <multiplicity id="43" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-57" y="43"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="41">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="4"/>  
-  </generalization>  
-  <association id="42">    
-    <bendpoint x="69" y="478"/>    
-    <bendpoint x="331" y="478"/>    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="43" name="houseParking"/>      
-      <multiplicity id="44" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="45">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="46" name="contact"/>      
-      <multiplicity id="47" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
+    <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

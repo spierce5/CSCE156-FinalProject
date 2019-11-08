@@ -35,9 +35,7 @@ public abstract class Product {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-/*
-* Checks for low income customer
-*/
+
 
 	public abstract double calculateSubtotal(Customer customer, LocalDate date);
 	public abstract double calculateTax(Customer customer, LocalDate date);

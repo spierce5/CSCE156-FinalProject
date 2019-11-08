@@ -10,7 +10,6 @@ public class Invoice {
 	private LocalDate date;
 	private ArrayList<Product> products;
 	private double fees;
-	private boolean lowIncome = false;
 	private boolean housingCredit = false;
 	
 
@@ -102,7 +101,7 @@ public class Invoice {
 		for(Product p: products) {
 			Total += p.calculateTotalCost(customer, date);
 		}
-		if(lowIncome) {
+		if(customer.isLowIncome()) {
 			Total *= 0.9;
 			Total += 50.75;
 			if(housingCredit) {
@@ -139,9 +138,8 @@ public class Invoice {
 		System.out.println(String.format("%-10s %-30s %-20s %-16s %-12s %-12s %-12s %-12s", "Invoice",
 				"Customer", "Realtor", "Subtotal", "Fees", "Tax", "Discount", "Total"));
 		for(Invoice Inv: list) {
-			if(Inv.getCustomer() instanceof LowIncome) 		{	//Printable version of customer type
+			if(Inv.getCustomer().isLowIncome()) 		{	//Printable version of customer type
 				fees = 50.75;
-				lowIncome = true;
 				for(Product p: Inv.getProducts()) {
 					if(p instanceof SaleAgreements || p instanceof LeaseAgreements) {
 						housingCredit = true;
@@ -152,7 +150,7 @@ public class Invoice {
 				fees = 0.0;
 			}
 			
-			String discount = String.format("%.2f", Inv.getDiscount(Inv.getProducts(), lowIncome, housingCredit));
+			String discount = String.format("%.2f", Inv.getDiscount(Inv.getProducts(), Inv.getCustomer().isLowIncome(), housingCredit));
 			System.out.println(String.format("%-10s %-30s %-20s $%-16.2f %-12s $%-12.2f %-12s $%-12.2f", Inv.getInvoiceCode(),
 					Inv.getCustomer().getName(), Inv.getLandlord().getFullName(), Inv.getSubtotal(Inv.getProducts()),
 					fees, Inv.getTax(Inv.getProducts()), discount , Inv.getTotal(Inv.getProducts(),Inv.getCustomer())));
@@ -160,7 +158,7 @@ public class Invoice {
 			subTotal1 += Inv.getSubtotal(Inv.getProducts());
 			subTotal2 += fees;
 			subTotal3 += Inv.getTax(Inv.getProducts());
-			subTotal4 += Inv.getDiscount(Inv.getProducts(), lowIncome, housingCredit);
+			subTotal4 += Inv.getDiscount(Inv.getProducts(), Inv.getCustomer().isLowIncome(), housingCredit);
 			subTotal5 += Inv.getTotal(Inv.getProducts(),Inv.getCustomer());
 			
 		}
@@ -178,10 +176,8 @@ public class Invoice {
 		for(Invoice Inv: list) {
 			String customerType = null;
 			housingCredit = false;
-			lowIncome = false;
-			if(Inv.getCustomer() instanceof LowIncome) {			//Printable version of customer type
+			if(Inv.getCustomer().isLowIncome()) {			//Printable version of customer type
 				customerType = "[Low-Income]";
-				lowIncome = true;
 			}
 			else {
 				customerType = "[General]";
@@ -202,7 +198,7 @@ public class Invoice {
 				switch(p.getProductType()) {
 				case "S":
 					SaleAgreements sa = (SaleAgreements) p;
-					if(lowIncome) {
+					if(Inv.getCustomer().isLowIncome()) {				//Applies housing credit due to SaleAgreement
 						housingCredit = true;
 					}
 					String interest = String.format("%.2f", sa.calculateInterest(Inv.getDate()));
@@ -211,7 +207,7 @@ public class Invoice {
 					break;
 				case "L":
 					LeaseAgreements la = (LeaseAgreements) p;
-					if(lowIncome) {
+					if(Inv.getCustomer().isLowIncome()) {				//Applies housing credit due to LeaseAgreement
 						housingCredit = true;
 					}
 					String price = String.format("%.2f", la.getPricePerApartment());
@@ -244,12 +240,12 @@ public class Invoice {
 			System.out.println(String.format("%-72s %-45s", " ", "======================================"));
 			System.out.println(String.format("%-72s %-15.2f %-15.2f %-15.2f", "SUBTOTALS", Inv.getSubtotal(Inv.getProducts()), Inv.getTax(Inv.getProducts()), Inv.getTotal(Inv.getProducts(), Inv.getCustomer())));
 			if(housingCredit) {
-				System.out.println(String.format("%-105s %-15.2f", "DISCOUNT (10% LOW INCOME + $1000 HOUSING CREDIT)", Inv.getDiscount(Inv.getProducts(), lowIncome, housingCredit)));
+				System.out.println(String.format("%-105s %-15.2f", "DISCOUNT (10% LOW INCOME + $1000 HOUSING CREDIT)", Inv.getDiscount(Inv.getProducts(), Inv.getCustomer().isLowIncome(), housingCredit)));
 			}
-			else if(lowIncome) {
-				System.out.println(String.format("%-105s %-15.2f", "DISCOUNT (10% LOW INCOME)", Inv.getDiscount(Inv.getProducts(), lowIncome, housingCredit)));
+			else if(Inv.getCustomer().isLowIncome()) {
+				System.out.println(String.format("%-105s %-15.2f", "DISCOUNT (10% LOW INCOME)", Inv.getDiscount(Inv.getProducts(), true, housingCredit)));
 			}
-			if(lowIncome) {
+			if(Inv.getCustomer().isLowIncome()) {
 				System.out.println(String.format("%-105s %-15.2f", "Additional Fee (Low-Income)", 50.75));
 			}	
 		}	

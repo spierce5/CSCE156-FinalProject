@@ -41,20 +41,10 @@ public class FlatFileReader {
 		for (String item: data) {
 			String token[] = item.split(";");
 			String address = token[4];
-			Address add = new Address(address);
-			
-			switch(token[1]) {
-			case "G":
-				StandardCustomer strdCustomer = new StandardCustomer(token[0], token[1], personMap.get(token[2]), token[3], add);
-				customerMap.put(token[0], strdCustomer);									//Map: Name-->Customer
-				customers.add(strdCustomer);
-				break;
-			case "L":
-				LowIncome lowIncCustomer = new LowIncome(token[0], token[1], personMap.get(token[2]), token[3], add);
-				customerMap.put(token[0], lowIncCustomer);									//Map: Name-->Customer
-				customers.add(lowIncCustomer);
-				break;
-			}
+			Address add = new Address(address);			
+			Customer customer = new Customer(token[0], token[1], personMap.get(token[2]), token[3], add);
+			customerMap.put(token[0], customer);									//Map: Name-->Customer
+			customers.add(customer);
 		}
 
 		sc.close();
@@ -143,8 +133,9 @@ public class FlatFileReader {
 
 				String la = token[4];
 				Address leaseAddress = new Address(la);
-				double d = Double.parseDouble(token[6]);
-				LeaseAgreements a = new LeaseAgreements(token[0], token[1], leaseStartDate, leaseEndDate, leaseAddress, customerMap.get(token[5]), d);
+				double cost = Double.parseDouble(token[6]);
+				double deposit = Double.parseDouble(token[7]);
+				LeaseAgreements a = new LeaseAgreements(token[0], token[1], leaseStartDate, leaseEndDate, leaseAddress, customerMap.get(token[5]), cost, deposit);
 				productMap.put(token[0], a);
 				products.add(a);
 				break;
