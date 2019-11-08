@@ -157,6 +157,9 @@ public class Invoice {
 		double Total = 0;
 		Total = totalAfterTax(products, customer);
 		Total += getDiscount(products, customer.isLowIncome(), apartmentAssociation);
+		if(customer.isLowIncome()) {
+			Total += 50.75;
+		}
 		return Total;
 	}
 /*
@@ -286,8 +289,26 @@ public class Invoice {
 					}
 					break;
 				}
+				double subTotal;
+				double tax;
+				double total;
+				if(Inv.leaseAssociation && p.getProductType().equals("A")) {
+					subTotal = (p.calculateSubtotal(Inv.getCustomer(), Inv.getDate()) * 0.95);
+					if(Inv.getCustomer().isLowIncome()) {
+						tax = 0;
+					}
+					else {
+						tax = (subTotal * 0.04);
+					}
+				total = subTotal + tax;
+				}
+				else {
+					subTotal = p.calculateSubtotal(Inv.getCustomer(), Inv.getDate());
+					tax = p.calculateTax(Inv.getCustomer(), Inv.getDate());
+					total = p.calculateTotalCost(Inv.getCustomer(), Inv.getDate());
+				}
 				System.out.println(String.format("%-12s %-60s %-15.2f %-15.2f %-15.2f", p.getProductCode(),
-						item, p.calculateSubtotal(Inv.getCustomer(), Inv.getDate()), p.calculateTax(Inv.getCustomer(), Inv.getDate()), p.calculateTotalCost(Inv.getCustomer(), Inv.getDate())));
+						item, subTotal, tax, total));
 				if(item2 != null);{
 					System.out.println(String.format("%-12s %-60s", " ", item2));
 				}
