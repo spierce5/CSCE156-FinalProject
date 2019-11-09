@@ -2,12 +2,10 @@
 
 
 import java.util.ArrayList;
-
-
 import entities.*;
 import reader.DatabaseReaderFile;
 import reader.FlatFileReader;
-
+import entities.TotalComparator;
 
 public class InvoiceReport{
 

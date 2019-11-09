@@ -10,6 +10,7 @@ public class Invoice {
 	private LocalDate date;
 	private ArrayList<Product> products;
 	private double fees;
+	private double invoiceTotal;
 	private boolean apartmentAssociation = false;
 	private boolean leaseAssociation = false;
 	private boolean amenityAssociation = false;
@@ -35,25 +36,33 @@ public class Invoice {
 				this.amenityAssociation = true;
 			}
 		}
+		this.invoiceTotal = this.totalAfterTax(products, customer);
 	}
 /*
  * Getter and Setter Methods 
  */
 	
 	
+	
 	public String getInvoiceCode() {
 		return invoiceCode;
 	}
 	
+	public double getInvoiceTotal() {
+		return invoiceTotal;
+	}
+
+	public void setInvoiceTotal(double invoiceTotal) {
+		this.invoiceTotal = invoiceTotal;
+	}
+
 	public boolean isAmenityAssociation() {
 		return amenityAssociation;
 	}
 
-
 	public void setAmenityAssociation(boolean amenityAssociation) {
 		this.amenityAssociation = amenityAssociation;
 	}
-
 
 	public boolean isApartmentAssociation() {
 		return apartmentAssociation;
