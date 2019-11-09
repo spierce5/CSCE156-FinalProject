@@ -97,7 +97,7 @@ public class SaleAgreements extends Product {
  * Returns sub total of all Sales
  */
 	public double calculateSubtotal(Customer customer, LocalDate date) {
-		return quantity * (monthlyPayment + (totalCost - initialPayment - amountPaid(date)) * (interestRate/100));
+		return quantity * (monthlyPayment + (calculateInterest(date)));
 	}
 /*
  * Returns tax on all units
@@ -123,8 +123,8 @@ public class SaleAgreements extends Product {
 		double amount = 0;
 		LocalDate start = startDate.toLocalDate();
 		Period timeBetween = Period.between(start, date);
-		int monthsBetween = timeBetween.getMonths();
-		amount = monthsBetween * monthlyPayment;
+		int monthsBetween = timeBetween.getMonths() + (timeBetween.getYears() * 12);
+		amount = (monthsBetween) * monthlyPayment;
 		return amount;
 	}
 

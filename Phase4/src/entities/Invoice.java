@@ -119,7 +119,12 @@ public class Invoice {
 	public double getSubtotal(ArrayList<Product> products) {
 		double subtotal = 0;
 		for(Product p: products) {
-			subtotal += p.calculateSubtotal(customer, date);
+			if(p instanceof Amenity && leaseAssociation == true) {
+				subtotal += (p.calculateSubtotal(customer, date) * 0.95);
+			}
+			else {
+				subtotal += p.calculateSubtotal(customer, date);
+			}
 		}
 		return subtotal;
 	}
@@ -140,14 +145,7 @@ public class Invoice {
 */
 	public double totalAfterTax(ArrayList<Product> products, Customer customer) {
 		double Total = 0;
-		for(Product p: products) {
-			if(p instanceof Amenity && leaseAssociation == true) {
-				Total += (p.calculateTotalCost(customer, date) * 0.95);
-			}
-			else {
-				Total += p.calculateTotalCost(customer, date);
-			}
-		}
+		Total = getSubtotal(products) + getTotalTax(products);
 		return Total;
 	}
 /*
