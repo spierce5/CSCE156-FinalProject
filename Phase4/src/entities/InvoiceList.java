@@ -17,8 +17,25 @@ public class InvoiceList implements Iterable<Invoice> {
 
 	@Override
 	public Iterator<Invoice> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new IteratorInvoice();
+	}
+	
+	class IteratorInvoice implements Iterator<Invoice>{
+		int index = 0;
+		InvoiceNode<Invoice> currentNode = new InvoiceNode<Invoice>();
+		
+
+		@Override
+		public boolean hasNext() {
+			return currentNode != null;
+		}
+
+		@Override
+		public Invoice next() {
+			Invoice invoice = currentNode.getInvoice();
+			currentNode = currentNode.getNextNode();
+			return invoice;
+		}
 	}
 	
 	public void add(Invoice item) {
@@ -39,7 +56,9 @@ public class InvoiceList implements Iterable<Invoice> {
 			}
 		}
 		else {
-			//TO-DO:: finish add method
+			for(int i=0; i < size; i++) {
+				//TO-DO:: finish this
+			}
 		}
 	}
 
