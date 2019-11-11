@@ -1,9 +1,9 @@
 package entities;
 
-public class InvoiceNode<T> {
+public class InvoiceNode<Invoice> {
 	
 	private Invoice invoice;
-	private InvoiceNode<T> nextNode;
+	private InvoiceNode<Invoice> nextNode;
 
 	public InvoiceNode() {
 		this.invoice = null;
@@ -15,7 +15,7 @@ public class InvoiceNode<T> {
 		this.nextNode = null;
 	}
 	
-	public InvoiceNode(Invoice invoice, InvoiceNode<T> next) {
+	public InvoiceNode(Invoice invoice, InvoiceNode<Invoice> next) {
 		this.invoice = invoice;
 		this.nextNode = next;
 	}
@@ -28,11 +28,11 @@ public class InvoiceNode<T> {
 		this.invoice = invoice;
 	}
 	
-	public InvoiceNode<T> getNextNode() {
+	public InvoiceNode<Invoice> getNextNode() {
 		return nextNode;
 	}
 	
-	public void setNextNode(InvoiceNode<T> nextNode) {
+	public void setNextNode(InvoiceNode<Invoice> nextNode) {
 		this.nextNode = nextNode;
 	}
 

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import entities.*;
 import reader.DatabaseReaderFile;
 import reader.FlatFileReader;
-import entities.TotalComparator;
 
 public class InvoiceReport{
 
@@ -27,9 +26,21 @@ public class InvoiceReport{
 		ArrayList<Product> products = fr.readProduct();
 		ArrayList<Invoice> invoices = fr.readInvoice();
 		
+		InvoiceList list = new InvoiceList();
+		for(Invoice i: invoices) {
+			list.add(i);
+		}
+		
+		for(Invoice i: list) {
+			System.out.println(i.getInvoiceCode() + "Total: " + i.getSubtotal(i.getProducts()));
+		}
+		for(Invoice g: invoices) {
+			System.out.println(g.getInvoiceCode());
+		}
+		/*
 		invoices.get(0).PrintSummary(invoices);
 		invoices.get(0).PrintInvoices(invoices); 
-		
+		*/
 		
 		//db.closeConnection();
 	}
