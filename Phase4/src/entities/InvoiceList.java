@@ -5,9 +5,9 @@ import java.util.Comparator;
 
 public class InvoiceList implements Iterable<Invoice>{
 	private InvoiceNode<Invoice> start;
-	private int size; 
+	private int size;
 	private Comparator<Invoice> comp;
-	
+
 	public InvoiceList() {
 		Comparator<Invoice> comp = new TotalComparator();
 		this.start = null;
@@ -43,13 +43,13 @@ public class InvoiceList implements Iterable<Invoice>{
 	public Iterator<Invoice> iterator() {
 		return new InvoiceListIterator(this);
 	}
-	
-	class InvoiceListIterator implements Iterator<Invoice>{	
+
+	class InvoiceListIterator implements Iterator<Invoice>{
 		InvoiceNode<Invoice> currentNode;
-		public InvoiceListIterator(InvoiceList list) { 
-		        currentNode = list.start; 
-		    } 
-		
+		public InvoiceListIterator(InvoiceList list) {
+		        currentNode = list.start;
+		    }
+
 
 		@Override
 		public boolean hasNext() {
@@ -66,28 +66,27 @@ public class InvoiceList implements Iterable<Invoice>{
 			return currentNode;
 		}
 	}
-	
+
 	public void add(Invoice item) {
 		InvoiceNode<Invoice> newNode = new InvoiceNode<Invoice>(item);
 		if(start == null) {
-			size++;
 			newNode.setNextNode(null);
-			start = newNode; 
+			start = newNode;
 		}
 		else if(size == 1) {
-			size++;
-			if(comp.compare(newNode.getInvoice(), start.getInvoice()) > 0) {
+			if(comp.compare(newNode.getInvoice(), start.getInvoice()) < 0) {
 				start.setNextNode(newNode);
 				newNode.setNextNode(null);
 			}
 			else {
 				newNode.setNextNode(start);
-				start = newNode; 
+				start = newNode;
 			}
 		}
 		else {
-			size++;
-			InvoiceListIterator iterator = new InvoiceListIterator(this);
+			InvoiceNode<Invoice> currentNode = start;
+			InvoiceNode<Invoice> previousNode = null;
+			/*
 			if(comp.compare(newNode.getInvoice(), start.getInvoice()) > 0) {
 				newNode.setNextNode(start);
 				start = newNode;
@@ -97,27 +96,27 @@ public class InvoiceList implements Iterable<Invoice>{
 				newNode.setNextNode(start.getNextNode());
 			}
 			else {
-				
+				*/
 				boolean nodeSet = false;
-				
-				while(iterator.hasNext()) {
-					InvoiceNode<Invoice> currentNode = iterator.getCurrent();
-					if(nodeSet) {
-						break;
-					}
-					if(comp.compare(newNode.getInvoice(), iterator.next()) >= 0) {
-						currentNode.setNextNode(newNode);
-						newNode.setNextNode(iterator.getCurrent());
-						nodeSet = true;
+				//To-Do: if current greater than start
+
+				while(currentNode != null && comp.compare(newNode.getInvoice(), currentNode.getInvoice()) < 0) {
+						previousNode = currentNode;
+						currentNode = currentNode.getNextNode();
+						if(previousNode != null){
+							previousNode.setNextNode(newNode);
+						}
+						newNode.setNextNode(currentNode);
 					}
 				}
-			}
-				 
-			
-		}
+		size++;
+			//}
+
+
+	//}
 	}
 
 
-	
+
 
 }
