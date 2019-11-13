@@ -86,34 +86,47 @@ public class InvoiceList implements Iterable<Invoice>{
 		else {
 			InvoiceNode<Invoice> currentNode = start;
 			InvoiceNode<Invoice> previousNode = null;
-			/*
+			
 			if(comp.compare(newNode.getInvoice(), start.getInvoice()) > 0) {
 				newNode.setNextNode(start);
 				start = newNode;
 			}
-			else if(comp.compare(newNode.getInvoice(), start.getNextNode().getInvoice()) > 0) {
-				start.setNextNode(newNode);
-				newNode.setNextNode(start.getNextNode());
-			}
 			else {
-				*/
-				boolean nodeSet = false;
-				//To-Do: if current greater than start
-
 				while(currentNode != null && comp.compare(newNode.getInvoice(), currentNode.getInvoice()) < 0) {
-						previousNode = currentNode;
-						currentNode = currentNode.getNextNode();
-						if(previousNode != null){
+					previousNode = currentNode;
+					currentNode = currentNode.getNextNode();
+					if(currentNode != null) {
+						if(comp.compare(newNode.getInvoice(), currentNode.getInvoice()) > 0) {
+							newNode.setNextNode(currentNode);
 							previousNode.setNextNode(newNode);
 						}
-						newNode.setNextNode(currentNode);
+						
+					}
+					else {
+						previousNode.setNextNode(newNode);
+						newNode.setNextNode(null);
 					}
 				}
+			}
+
+			
+			
+			
+			
+			
+			
+			/*
+			 while(currentNode != null &&  comp.compare(newNode.getInvoice(), currentNode.getInvoice()) > 0) {
+				previousNode = currentNode;
+				currentNode = currentNode.getNextNode();
+				if(previousNode != null){
+					previousNode.setNextNode(newNode);
+				}
+				newNode.setNextNode(currentNode);
+			}
+			 */
+		}
 		size++;
-			//}
-
-
-	//}
 	}
 
 

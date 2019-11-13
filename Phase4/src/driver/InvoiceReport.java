@@ -30,12 +30,13 @@ public class InvoiceReport{
 		for(Invoice i: invoices) {
 			list.add(i);
 		}
-		
+		System.out.println("DATA: ");
+		for(Invoice g: invoices) {
+			System.out.println(g.getInvoiceCode() + "----" + g.getInvoiceTotal());
+		}
+		System.out.println("Result");
 		for(Invoice i: list) {
 			System.out.println(i.getInvoiceCode() + "Total: " + i.getSubtotal(i.getProducts()));
-		}
-		for(Invoice g: invoices) {
-			System.out.println(g.getInvoiceCode());
 		}
 		/*
 		invoices.get(0).PrintSummary(invoices);
