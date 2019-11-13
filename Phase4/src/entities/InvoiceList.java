@@ -108,23 +108,6 @@ public class InvoiceList implements Iterable<Invoice>{
 					}
 				}
 			}
-
-			
-			
-			
-			
-			
-			
-			/*
-			 while(currentNode != null &&  comp.compare(newNode.getInvoice(), currentNode.getInvoice()) > 0) {
-				previousNode = currentNode;
-				currentNode = currentNode.getNextNode();
-				if(previousNode != null){
-					previousNode.setNextNode(newNode);
-				}
-				newNode.setNextNode(currentNode);
-			}
-			 */
 		}
 		size++;
 	}
