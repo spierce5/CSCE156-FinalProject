@@ -13,7 +13,7 @@ public class SaleAgreements extends Product {
 	private Double monthlyPayment;
 	private Double totalMonths;
 	private Double interestRate;
-	private ParkingPass houseParking;
+	
 
 	public SaleAgreements(String productCode, String productType, LocalDateTime dateTime, Address address,
 			Double totalCost, Double initialPayment, Double monthlyPayment, Double totalMonths, Double interestRate) {
@@ -80,13 +80,6 @@ public class SaleAgreements extends Product {
 		this.interestRate = interestRate;
 	}
 
-	public ParkingPass getHouseParking() {
-		return houseParking;
-	}
-
-	public void setHouseParking(ParkingPass houseParking) {
-		this.houseParking = houseParking;
-	}
 /*
  * Calculates interest
  */
