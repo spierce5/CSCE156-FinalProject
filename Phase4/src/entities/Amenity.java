@@ -6,13 +6,13 @@ import java.util.ArrayList;
 public class Amenity extends Product{
 
 	private double price;
-	private String name;
+	private String description;
 	private boolean discount = false;
 	
-	public Amenity(String productCode, String productType, String name, double cost) {
+	public Amenity(String productCode, String productType, String description, double cost) {
 		super(productCode, productType);
 		this.price = cost;
-		this.name = name;
+		this.description = description;
 	}
 	
 	public double getPrice() {
@@ -21,11 +21,11 @@ public class Amenity extends Product{
 	public void setCost(double cost) {
 		this.price = cost;
 	}
-	public String getName() {
-		return name;
+	public String getDescription() {
+		return description;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setDescription(String name) {
+		this.description = name;
 	}
 /*
  * Calculates sub total for items plus a service fee to check if customer is low income

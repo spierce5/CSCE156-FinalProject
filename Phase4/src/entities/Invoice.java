@@ -289,10 +289,10 @@ public class Invoice {
 					Amenity am = (Amenity) p;
 					String unitPrice = String.format("%.2f", am.getPrice());
 					if(Inv.amenityAssociation && Inv.leaseAssociation) {
-						item.append(am.getName() + " (" + am.getQuantity() + " Units @ $" + unitPrice + " /Unit with 5% off)");
+						item.append(am.getDescription() + " (" + am.getQuantity() + " Units @ $" + unitPrice + " /Unit with 5% off)");
 					}
 					else {
-						item.append(am.getName() + " (" + am.getQuantity() + " Units @ $" + unitPrice + " /Unit)");
+						item.append(am.getDescription() + " (" + am.getQuantity() + " Units @ $" + unitPrice + " /Unit)");
 					}
 					break;
 				}

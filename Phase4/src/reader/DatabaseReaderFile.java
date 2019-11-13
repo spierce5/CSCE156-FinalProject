@@ -17,6 +17,7 @@ public class DatabaseReaderFile {
 	//connecting eclipse and database
 	static Connection connect = null;
 	Statement stat = null;
+	PreparedStatement ps = null;
 
 	static final String driverJDBC = "com.mysql.jdbc.Driver";
 	static final String url = "jdbc:mysql://cse.unl.edu/ajayswal";
@@ -47,17 +48,18 @@ public class DatabaseReaderFile {
 		}
 	}
 
-	//array list of person gives a list of all the person in the data
+	/*
+	 * Queries the database for all elements in the Person table, parses the information, and returns an array of Person objects
+	 */
 	public ArrayList<Person> readPersons() {
 		ArrayList<Person> people = new ArrayList<Person>();
 		String query1;
 		query1 = "SELECT * from Person";
-		Statement stat1;
 
 		//
 		try {
-			stat1 = connect.createStatement();
-			ResultSet rs = stat1.executeQuery(query1);
+			stat = connect.createStatement();
+			ResultSet rs = stat.executeQuery(query1);
 
 			while (rs.next()) {
 				int personID = rs.getInt("PersonId");
@@ -66,12 +68,12 @@ public class DatabaseReaderFile {
 				String lastName = rs.getString("LastName");
 				int addressID = rs.getInt("AddressId");
 
-				Person person = new Person(personCode, lastName, firstName, address(addressID));
-				person.setEmail(email(personID));
+				Person person = new Person(personCode, lastName, firstName, getAddress(addressID));
+				person.setEmail(getEmails(personID));
 
 				people.add(person);
 			}
-			stat1.close();
+			stat.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -80,43 +82,40 @@ public class DatabaseReaderFile {
 		return people;
 	}
 
-	// email
-	public ArrayList<String> email(int PersonId) {
-		ArrayList<String> string = new ArrayList<String>();
-
-		PreparedStatement stat = null;
+	/*
+	 * Queries the database for all email addresses associated with a specific PersonId
+	 */
+	public ArrayList<String> getEmails(int PersonId) {
+		ArrayList<String> emailList = new ArrayList<String>();
 
 		try {
+			ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Email WHERE PersonId = ?");
+			ps.setInt(1, PersonId);
 
-			stat = (PreparedStatement) connect.prepareStatement("SELECT * from Email where PersonId = ?");
-			stat.setInt(1, PersonId);
-
-			ResultSet rs = stat.executeQuery();
+			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 
 				String str = rs.getString("Email");
-				string.add(str);
+				emailList.add(str);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return string;
-
+		return emailList;
 	}
+/*
+ * Queries the database for an address with a specific AddressId
+ */
+	public Address getAddress(int AddressId) {
 
-	public Address address(int AddressId) {
-
-		PreparedStatement stat = null;
 		Address address = null;
 
 		try {
 
-			stat = (PreparedStatement) connect.prepareStatement("SELECT * from Address where AddressId = ?");
-			stat.setInt(1, AddressId);
+			ps = (PreparedStatement) connect.prepareStatement("SELECT * from Address where AddressId = ?");
+			ps.setInt(1, AddressId);
 
-			ResultSet rs = stat.executeQuery();
+			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				String street = rs.getString("Street");
 				String city = rs.getString("City");
@@ -133,7 +132,9 @@ public class DatabaseReaderFile {
 
 		return address;
 	}
-
+/*
+ * Queries the database for all elements in the Address table, parses the information, and returns an array of Addresses
+ */
 	public ArrayList<Customer> readCustomers() {
 
 		ArrayList<Customer> customers = new ArrayList<Customer>();
@@ -143,30 +144,20 @@ public class DatabaseReaderFile {
 
 		try {
 
-			Statement stat = connect.createStatement();
+			stat = connect.createStatement();
 			ResultSet rs = stat.executeQuery(query1);
 
 			while (rs.next()) {
-				int customerID = rs.getInt("CustomerId");
+				int customerID = rs.getInt("CustomerId");			//is this used somewhere?
 				String customerCode = rs.getString("CustomerCode");
 				String customerType = rs.getString("CustomerType");
 				String clientName = rs.getString("ClientName");
 				int personID = rs.getInt("personId");
 				int addressID = rs.getInt("AddressId");
 
-				// for lowerIncome customers
-				if (customerType.equals("L")) {
-					LowIncome lowIncCustomer = new LowIncome(customerCode, customerType, person(personID), clientName,
-							address(addressID));
-
-					customers.add(lowIncCustomer);
-				} else {
-					StandardCustomer StandCustomer = new StandardCustomer(customerCode, customerType, person(personID), clientName,
-							address(addressID));
-
-					customers.add(StandCustomer);
-				}
-
+					Customer newCustomer = new Customer(customerCode, customerType, person(personID), clientName,
+							getAddress(addressID));
+					customers.add(newCustomer);
 			}
 
 		} catch (Exception e) {
@@ -177,7 +168,9 @@ public class DatabaseReaderFile {
 
 		return customers;
 	}
-
+/*
+ * Queries the database for a Person associated with specific PersonId
+ */
 	public Person person(int PersonId) {
 
 		PreparedStatement stat = null;
@@ -197,8 +190,8 @@ public class DatabaseReaderFile {
 				String lastName = rs.getString("LastName");
 				int addressID = rs.getInt("AddressId");
 
-				person1 = new Person(personCode, lastName, firstName, address(addressID));
-				person1.setEmail(email(personID));
+				person1 = new Person(personCode, lastName, firstName, getAddress(addressID));
+				person1.setEmail(getEmails(personID));
 
 			}
 		} catch (Exception e) {
@@ -210,10 +203,12 @@ public class DatabaseReaderFile {
 		return person1;
 	}
 	
-	// database for product
+/*
+ * Queries the database for all elements in the Product table, parses the data, and returns an array of products
+ */
 	public ArrayList<Product> readProduct(){
 		
-		ArrayList<Customer> customers = new ArrayList<Customer>();
+		ArrayList<Product> products = new ArrayList<Product>();
 
 		String query1;
 		query1 = "SELECT * from Product";
@@ -234,38 +229,54 @@ public class DatabaseReaderFile {
 
 			}
 		
-		
+		return products;
 	}
-	
-	public Product product(int ProductId, int ProductCode, String ProductType) {
-		
-		PreparedStatement stat = null;
-		Person person1 = null;
-
+/*
+ * Queries the database for an element from either the SaleAgreement, LeaseAgreement, ParkingPass, or Amenity table given a ProductType and ProductId
+ */
+	public Product product(int productId, String productCode, String productType) {
+		Product product = null;
 		try {
-
-			stat = (PreparedStatement) connect.prepareStatement("SELECT * from Product where ProductId = ? AND ProductCode = ? AND ProductType = ?");
-			stat.setInt(1, ProductId);
-			stat.setString(3, ProductType);
+		//	ps = (PreparedStatement) connect.prepareStatement("SELECT * from Product where ProductId = ? AND ProductCode = ? AND ProductType = ?");
+		//	ps.setInt(1, ProductId);
+		//	ps.setString(3, ProductType);
+			ResultSet rs;
+			int quantity;
 			
-			//for Amenity
-			if (ProductType.equals("A")) {
-				
+			switch(productType) {
+				case "A":
+					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Amenity WHERE ProductId = ?");
+					ps.setInt(1, productId);
+					rs = ps.executeQuery();
+					double price = rs.getDouble("Price");
+					String description = rs.getString("Description");
+					quantity = rs.getInt("Quantity");
+					Amenity amenity = new Amenity(productCode, productType, description, price);
+					amenity.setQuantity(quantity);
+					product = amenity;
+					break;
+				case "P":
+					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM ParkingPass WHERE ProductId = ?");
+					ps.setInt(1, productId);
+					rs = ps.executeQuery();
+					double parkingFee = rs.getDouble("ParkingFee"); //Updated missing column in ParkingPass
+					String apartmentCode = rs.getString("LeaseCode");//Needs to be updated to Product type
+					
+					break;
+				case "L":
+					//do stuff
+					break;
+				case "S": 
+					//do stuff
+					break;
+				default:
+					System.err.println("Product Type Not Found");
+					break;					
 			}
-
-			ResultSet rs = stat.executeQuery();
-			while (rs.next()) {
-				
-				}
-			} catch (Exception e) {
-
-				e.printStackTrace();
-
+		} catch (Exception e) {
+			e.printStackTrace();
 			}
-
-		
-		
-		return null;
+		return product;
 	}
 
 }
