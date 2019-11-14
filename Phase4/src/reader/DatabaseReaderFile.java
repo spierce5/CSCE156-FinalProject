@@ -18,15 +18,17 @@ import entities.*;
 
 public class DatabaseReaderFile {
 
+	DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	//connecting eclipse and database
 	static Connection connect = null;
 	Statement stat = null;
 	PreparedStatement ps = null;
 
 	static final String driverJDBC = "com.mysql.jdbc.Driver";
-	static final String url = "jdbc:mysql://cse.unl.edu/ajayswal";
-	static final String username = "ajayswal";
-	static final String password = "Shivbaba98853#";
+	static final String url = "jdbc:mysql://cse.unl.edu/spierce"; //jdbc:mysql://cse.unl.edu/ajayswal
+	static final String username = "spierce";					//ajayswal
+	static final String password = "pa4hUY";			//Shivbaba98853#
 
 	// method  to connect to JDBC and checking for errors
 	public void ConnectionToJdbc() {
@@ -52,9 +54,34 @@ public class DatabaseReaderFile {
 		}
 	}
 
-	/*
-	 * Queries the database for all elements in the Person table, parses the information, and returns an array of Person objects
-	 */
+/*
+ * Queries the database for a Person associated with specific PersonId
+ */
+	public Person getPerson(int PersonId) {
+		Person person1 = null;
+		try {
+			ps = (PreparedStatement) connect.prepareStatement("SELECT * from Person where PersonId = ?");
+			ps.setInt(1, PersonId);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				int personID = rs.getInt("PersonId");
+				String personCode = rs.getString("PersonCode");
+				String firstName = rs.getString("FirstName");
+				String lastName = rs.getString("LastName");
+				int addressID = rs.getInt("AddressId");
+
+				person1 = new Person(personCode, lastName, firstName, getAddress(addressID));
+				person1.setEmail(getEmails(personID));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return person1;
+	}
+
+/*
+ * Queries the database for all elements in the Person table, parses the information, and returns an array of Person objects
+ */
 	public ArrayList<Person> readPersons() {
 		ArrayList<Person> people = new ArrayList<Person>();
 		String query1;
@@ -86,9 +113,9 @@ public class DatabaseReaderFile {
 		return people;
 	}
 
-	/*
-	 * Queries the database for all email addresses associated with a specific PersonId
-	 */
+/*
+ * Queries the database for all email addresses associated with a specific PersonId
+ */
 	public ArrayList<String> getEmails(int PersonId) {
 		ArrayList<String> emailList = new ArrayList<String>();
 
@@ -145,16 +172,16 @@ public class DatabaseReaderFile {
 		try {
 			ps = (PreparedStatement) connect.prepareStatement("SELECT * from Customer where PersonId = ?");
 			ps.setInt(1, CustomerId);
-
 			ResultSet rs = ps.executeQuery();
-			String customerCode = rs.getString("CustomerCode");
-			String customerType = rs.getString("CustomerType");
-			String clientName = rs.getString("ClientName");
-			int personID = rs.getInt("personId");
-			int addressID = rs.getInt("AddressId");
+			while(rs.next()) {
+				String customerCode = rs.getString("CustomerCode");
+				String customerType = rs.getString("CustomerType");
+				String clientName = rs.getString("ClientName");
+				int personID = rs.getInt("personId");
+				int addressID = rs.getInt("AddressId");
 
-			customer = new Customer(customerCode, customerType, person(personID), clientName,
-						getAddress(addressID));
+				customer = new Customer(customerCode, customerType, getPerson(personID), clientName, getAddress(addressID));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -187,38 +214,6 @@ public class DatabaseReaderFile {
 		}
 
 		return customers;
-	}
-/*
- * Queries the database for a Person associated with specific PersonId
- */
-	public Person person(int PersonId) {
-		Person person1 = null;
-
-		try {
-
-			ps = (PreparedStatement) connect.prepareStatement("SELECT * from Person where PersonId = ?");
-			ps.setInt(1, PersonId);
-
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-
-				int personID = rs.getInt("PersonId");
-				String personCode = rs.getString("PersonCode");
-				String firstName = rs.getString("FirstName");
-				String lastName = rs.getString("LastName");
-				int addressID = rs.getInt("AddressId");
-
-				person1 = new Person(personCode, lastName, firstName, getAddress(addressID));
-				person1.setEmail(getEmails(personID));
-
-			}
-		} catch (Exception e) {
-
-			e.printStackTrace();
-
-		}
-
-		return person1;
 	}
 
 /*
@@ -253,8 +248,6 @@ public class DatabaseReaderFile {
  */
 	public Product getProduct(int productId, String productCode, String productType) {
 		Product product = null;
-		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		try {
 			ResultSet rs;
 			int quantity;
@@ -264,77 +257,141 @@ public class DatabaseReaderFile {
 					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Amenity WHERE ProductId = ?");
 					ps.setInt(1, productId);
 					rs = ps.executeQuery();
-					double price = rs.getDouble("Price");
-					String description = rs.getString("Description");
-					quantity = rs.getInt("Quantity");
-					Amenity amenity = new Amenity(productCode, productType, description, price);
-					amenity.setQuantity(quantity);
-
-					product = amenity;
-					break;
+					while (rs.next()) {
+						double price = rs.getDouble("Price");
+						String description = rs.getString("Description");
+						quantity = rs.getInt("Quantity");
+						Amenity amenity = new Amenity(productCode, productType, description, price);
+						amenity.setQuantity(quantity);
+						product = amenity;
+					}
+				break;
 				case "P":
 					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM ParkingPass WHERE ProductId = ?");
 					ps.setInt(1, productId);
 					rs = ps.executeQuery();
-					double parkingFee = rs.getDouble("ParkingFee"); //Updated missing column in ParkingPass
-					String apartmentCode = rs.getString("LeaseCode");
-					quantity = rs.getInt("Quantity");
-					ParkingPass parking = new ParkingPass(productCode, productType, parkingFee);
-					parking.setQuantity(quantity);
-
-					//Recursively obtains Lease or Sale Agreement associated with the ParkingPass
-					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Product WHERE ProductCode = ?");
-					ps.setString(1, apartmentCode);
-					rs = ps.executeQuery();
-					Product apartment = getProduct(rs.getInt("ProductId"), rs.getString("ProductCode"), rs.getString("ProductType"));
-					parking.setApartmentCode(apartment);
-
-					product = parking;
-					break;
+					while (rs.next()) {
+						double parkingFee = rs.getDouble("ParkingFee"); //Updated missing column in ParkingPass
+						String apartmentCode = rs.getString("LeaseCode");
+						quantity = rs.getInt("Quantity");
+						ParkingPass parking = new ParkingPass(productCode, productType, parkingFee);
+						parking.setQuantity(quantity);
+						
+						//Recursively obtains Lease or Sale Agreement associated with the ParkingPass
+						ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Product WHERE ProductCode = ?");
+						ps.setString(1, apartmentCode);
+						rs = ps.executeQuery();
+						Product apartment = getProduct(rs.getInt("ProductId"), rs.getString("ProductCode"), rs.getString("ProductType"));
+						parking.setApartmentCode(apartment);
+						product = parking;
+					}
+				break;
 				case "L":
 					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM LeaseAgreement WHERE ProductId = ?");
 					ps.setInt(1, productId);
 					rs = ps.executeQuery();
-					LocalDate startDate = LocalDate.parse(rs.getString("StartDate"), dateFormatter);
-					LocalDate endDate = LocalDate.parse(rs.getString("EndDate"), dateFormatter);
-					Address address = getAddress(rs.getInt("AddressId"));
-					double pricePerApartment = rs.getDouble("Price");
-					double deposit = rs.getDouble("Deposit");
-
-					//Obtains customer via InvoiceProduct
-					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM InvoiceProduct WHERE ProductId = ?");
-					ps.setInt(1, productId);
-					rs = ps.executeQuery();
-					Customer customer = getCustomer(rs.getInt("CustomerId"));
-
-					LeaseAgreements lease = new LeaseAgreements(productCode, productType, startDate, endDate, address, customer, pricePerApartment, deposit);
-					product = lease;
-					break;
+					while (rs.next()) {
+						LocalDate startDate = LocalDate.parse(rs.getString("StartDate"), dateFormatter);
+						LocalDate endDate = LocalDate.parse(rs.getString("EndDate"), dateFormatter);
+						Address address = getAddress(rs.getInt("AddressId"));
+						double pricePerApartment = rs.getDouble("Price");
+						double deposit = rs.getDouble("Deposit");
+						
+						//Obtains customer via InvoiceProduct
+						ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM InvoiceProduct WHERE ProductId = ?");
+						ps.setInt(1, productId);
+						ResultSet rs2 = ps.executeQuery();
+						Customer customer = getCustomer(rs2.getInt("CustomerId"));
+						LeaseAgreements lease = new LeaseAgreements(productCode, productType, startDate, endDate, address,
+								customer, pricePerApartment, deposit);
+						product = lease;
+					}
+				break;
 				case "S":
 					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM SaleAgreement WHERE ProductId = ?");
 					ps.setInt(1, productId);
 					rs = ps.executeQuery();
-					LocalDateTime date = LocalDateTime.parse(rs.getString("SaleDate"), dateTimeFormatter);
-					Address address1 = getAddress(rs.getInt("AddressId"));
-					double totalCost = rs.getDouble("TotalCost");
-					double initialPayment = rs.getDouble("InitialPayment");
-					double monthlyPayment = rs.getDouble("MonthlyPayment");
-					double totalMonths = rs.getDouble("TotalMonths");
-					double interestRate = rs.getDouble("InterestRate");
-					SaleAgreements sale = new SaleAgreements(productCode, productType, date, address1, totalCost, initialPayment, monthlyPayment,
-							totalMonths, interestRate);
-					product = sale;
-					break;
+					while (rs.next()) {
+						LocalDateTime date = LocalDateTime.parse(rs.getString("SaleDate"), dateTimeFormatter);
+						Address address1 = getAddress(rs.getInt("AddressId"));
+						double totalCost = rs.getDouble("TotalCost");
+						double initialPayment = rs.getDouble("InitialPayment");
+						double monthlyPayment = rs.getDouble("MonthlyPayment");
+						double totalMonths = rs.getDouble("TotalMonths");
+						double interestRate = rs.getDouble("InterestRate");
+						SaleAgreements sale = new SaleAgreements(productCode, productType, date, address1, totalCost,
+								initialPayment, monthlyPayment, totalMonths, interestRate);
+						product = sale;
+				}
+				break;
 				default:
 					System.err.println("Product Type Not Found");
 					break;
 			}
-			//TO-DO:: Invoice getInvoice
-			//TO-DO:: readInvoice
 		} catch (Exception e) {
 			e.printStackTrace();
 			}
 		return product;
+	}
+/*
+ * Returns an Invoice created from data acquired from database queries
+ */
+	public Invoice getInvoice(int invoiceId) {
+		Invoice newInvoice = null;
+		try {
+			ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Invoice WHERE InvoiceId = ?");
+			ps.setInt(1, invoiceId);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				//data that can be gathered from Invoice table alone
+				String invoiceCode = rs.getString("InvoiceCode");
+				LocalDate date = LocalDate.parse(rs.getString("InvoiceDate"), dateFormatter);
+				//data that requires InvoiceProduct
+				ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM InvoiceProduct WHERE InvoiceId = ?");
+				ps.setInt(1, rs.getInt("InvoiceId"));
+				ResultSet rs2 = ps.executeQuery();
+				Customer customer = getCustomer(rs2.getInt("CustomerId"));
+				Person landlord = getPerson(rs.getInt("Realtor"));
+				//data that requires other queries
+				ArrayList<Product> products = new ArrayList<Product>();
+				ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Product p JOIN InvoiceProduct i "
+						+ "ON i.ProductId = p.ProductId WHERE InvoiceId = ?");
+				ps.setInt(1, invoiceId);
+				rs2 = ps.executeQuery();
+				while (rs.next()) {
+					Product product = getProduct(rs2.getInt("ProductId"), rs2.getString("ProductCode"),
+							rs2.getString("ProductType"));
+					products.add(product);
+				}
+				newInvoice = new Invoice(invoiceCode, customer, landlord, date, products);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return newInvoice;
+	}
+/*
+ * Returns an InvoiceList of Invoices created using the getInvoice method
+ */
+	public InvoiceList readInvoices() {
+		InvoiceList invoices = new InvoiceList();
+
+		try {
+			ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Invoice");
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Invoice invoice = getInvoice(rs.getInt("InvoiceId"));
+				invoices.add(invoice);
+				}
+		}  
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return invoices;
 	}
 
 }
