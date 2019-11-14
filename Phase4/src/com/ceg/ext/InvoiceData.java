@@ -5,9 +5,10 @@ package com.ceg.ext;
  * interacting with the database supporting this application.
  * 15 methods in total, add more if required.
  * Do not change any method signatures or the package name.
- * 
+ *
  */
 
+// Odds: Asmita, Evens: Sam
 public class InvoiceData {
 
 	/**
@@ -17,7 +18,7 @@ public class InvoiceData {
 
 	/**
 	 * 2. Method to add a person record to the database with the provided data.
-	 * 
+	 *
 	 * @param personCode
 	 * @param firstName
 	 * @param lastName
@@ -32,7 +33,7 @@ public class InvoiceData {
 	/**
 	 * 3. Adds an email record corresponding person record corresponding to the
 	 * provided <code>personCode</code>
-	 * 
+	 *
 	 * @param personCode
 	 * @param email
 	 */
@@ -44,7 +45,7 @@ public class InvoiceData {
 	public static void removeAllCustomers() {}
 
 	public static void addCustomer(String customerCode, String customerType, String primaryContactPersonCode, String name, String street, String city, String state, String zip, String country) {}
-	
+
 	/**
 	 * 5. Removes all product records from the database
 	 */
@@ -53,7 +54,7 @@ public class InvoiceData {
 	/**
 	 * 6. Adds a SaleAgreement record to the database with the provided data.
 	 */
-	public static void addSaleAgreement(String productCode, String dateTime, String street, String city,String state, String zip, String country, double totalCost, double downPayment, double monthlyPayment, 
+	public static void addSaleAgreement(String productCode, String dateTime, String street, String city,String state, String zip, String country, double totalCost, double downPayment, double monthlyPayment,
 			int payableMonths, double interestRate) {}
 
 	/**
@@ -97,17 +98,17 @@ public class InvoiceData {
 	public static void addLeaseAgreementToInvoice(String invoiceCode, String productCode, int quantity) {}
 
      /**
-     * 14. Adds a particular ParkingPass (corresponding to <code>productCode</code> to an 
+     * 14. Adds a particular ParkingPass (corresponding to <code>productCode</code> to an
      * invoice corresponding to the provided <code>invoiceCode</code> with the given
      * number of quantity.
      * NOTE: agreementCode may be null
      */
     public static void addParkingPassToInvoice(String invoiceCode, String productCode, int quantity, String agreementCode) {}
-	
+
     /**
-     * 15. Adds a particular amenity (corresponding to <code>productCode</code> to an 
+     * 15. Adds a particular amenity (corresponding to <code>productCode</code> to an
      * invoice corresponding to the provided <code>invoiceCode</code> with the given
-     * number of quantity. 
+     * number of quantity.
      */
     public static void addAmenityToInvoice(String invoiceCode, String productCode, int quantity) {}
 

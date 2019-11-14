@@ -17,7 +17,7 @@ import com.mysql.jdbc.PreparedStatement;
 import entities.*;
 
 public class DatabaseReaderFile {
-	
+
 	//connecting eclipse and database
 	static Connection connect = null;
 	Statement stat = null;
@@ -220,17 +220,17 @@ public class DatabaseReaderFile {
 
 		return person1;
 	}
-	
+
 /*
  * Queries the database for all elements in the Product table, parses the data, and returns an array of products
  */
 	public ArrayList<Product> readProduct(){
-		
+
 		ArrayList<Product> products = new ArrayList<Product>();
 
 		String query1;
 		query1 = "SELECT * from Product";
-		
+
 		try {
 
 			Statement stat = connect.createStatement();
@@ -245,7 +245,7 @@ public class DatabaseReaderFile {
 				e.printStackTrace();
 
 			}
-		
+
 		return products;
 	}
 /*
@@ -258,7 +258,7 @@ public class DatabaseReaderFile {
 		try {
 			ResultSet rs;
 			int quantity;
-			
+
 			switch(productType) {
 				case "A":
 					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Amenity WHERE ProductId = ?");
@@ -269,7 +269,7 @@ public class DatabaseReaderFile {
 					quantity = rs.getInt("Quantity");
 					Amenity amenity = new Amenity(productCode, productType, description, price);
 					amenity.setQuantity(quantity);
-					
+
 					product = amenity;
 					break;
 				case "P":
@@ -281,14 +281,14 @@ public class DatabaseReaderFile {
 					quantity = rs.getInt("Quantity");
 					ParkingPass parking = new ParkingPass(productCode, productType, parkingFee);
 					parking.setQuantity(quantity);
-					
+
 					//Recursively obtains Lease or Sale Agreement associated with the ParkingPass
 					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Product WHERE ProductCode = ?");
 					ps.setString(1, apartmentCode);
 					rs = ps.executeQuery();
 					Product apartment = getProduct(rs.getInt("ProductId"), rs.getString("ProductCode"), rs.getString("ProductType"));
 					parking.setApartmentCode(apartment);
-					
+
 					product = parking;
 					break;
 				case "L":
@@ -299,36 +299,38 @@ public class DatabaseReaderFile {
 					LocalDate endDate = LocalDate.parse(rs.getString("EndDate"), dateFormatter);
 					Address address = getAddress(rs.getInt("AddressId"));
 					double pricePerApartment = rs.getDouble("Price");
-					double deposit = rs.getDouble("Deposit"); 
-					
+					double deposit = rs.getDouble("Deposit");
+
 					//Obtains customer via InvoiceProduct
 					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM InvoiceProduct WHERE ProductId = ?");
 					ps.setInt(1, productId);
 					rs = ps.executeQuery();
 					Customer customer = getCustomer(rs.getInt("CustomerId"));
-					
+
 					LeaseAgreements lease = new LeaseAgreements(productCode, productType, startDate, endDate, address, customer, pricePerApartment, deposit);
 					product = lease;
 					break;
-				case "S": 
+				case "S":
 					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM SaleAgreement WHERE ProductId = ?");
 					ps.setInt(1, productId);
 					rs = ps.executeQuery();
 					LocalDateTime date = LocalDateTime.parse(rs.getString("SaleDate"), dateTimeFormatter);
 					Address address1 = getAddress(rs.getInt("AddressId"));
-					Double totalCost = rs.getDouble("TotalCost");
-					Double initialPayment = rs.getDouble("InitialPayment");
-					Double monthlyPayment = rs.getDouble("MonthlyPayment");
-					Double totalMonths = rs.getDouble("TotalMonths");
-					Double interestRate = rs.getDouble("InterestRate");
-					SaleAgreements sale = new SaleAgreements(productCode, productType, date, address1, totalCost, initialPayment, monthlyPayment, 
+					double totalCost = rs.getDouble("TotalCost");
+					double initialPayment = rs.getDouble("InitialPayment");
+					double monthlyPayment = rs.getDouble("MonthlyPayment");
+					double totalMonths = rs.getDouble("TotalMonths");
+					double interestRate = rs.getDouble("InterestRate");
+					SaleAgreements sale = new SaleAgreements(productCode, productType, date, address1, totalCost, initialPayment, monthlyPayment,
 							totalMonths, interestRate);
 					product = sale;
 					break;
 				default:
 					System.err.println("Product Type Not Found");
-					break;					
+					break;
 			}
+			//TO-DO:: Invoice getInvoice
+			//TO-DO:: readInvoice
 		} catch (Exception e) {
 			e.printStackTrace();
 			}
