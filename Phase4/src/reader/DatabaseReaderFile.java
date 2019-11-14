@@ -223,13 +223,10 @@ public class DatabaseReaderFile {
 
 		ArrayList<Product> products = new ArrayList<Product>();
 
-		String query1;
-		query1 = "SELECT * from Product";
-
 		try {
 
-			Statement stat = connect.createStatement();
-			ResultSet rs = stat.executeQuery(query1);
+			ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Product");
+			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
 				Product product = getProduct(rs.getInt("ProductId"), rs.getString("ProductCode"), rs.getString("ProductType"));
@@ -271,18 +268,22 @@ public class DatabaseReaderFile {
 					ps.setInt(1, productId);
 					rs = ps.executeQuery();
 					while (rs.next()) {
-						double parkingFee = rs.getDouble("ParkingFee"); //Updated missing column in ParkingPass
-						String apartmentCode = rs.getString("LeaseCode");
+						double parkingFee = rs.getDouble("ParkingFee"); 
 						quantity = rs.getInt("Quantity");
 						ParkingPass parking = new ParkingPass(productCode, productType, parkingFee);
 						parking.setQuantity(quantity);
-						
-						//Recursively obtains Lease or Sale Agreement associated with the ParkingPass
-						ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Product WHERE ProductCode = ?");
-						ps.setString(1, apartmentCode);
-						rs = ps.executeQuery();
-						Product apartment = getProduct(rs.getInt("ProductId"), rs.getString("ProductCode"), rs.getString("ProductType"));
-						parking.setApartmentCode(apartment);
+						if(rs.getString("LeaseCode") != null) {
+							String apartmentCode = rs.getString("LeaseCode");
+							//Recursively obtains Lease or Sale Agreement associated with the ParkingPass
+							ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Product WHERE ProductCode = ?");
+							ps.setString(1, apartmentCode);
+							ResultSet rs2 = ps.executeQuery();
+							while (rs2.next()) {
+								Product apartment = getProduct(rs2.getInt("ProductId"), rs2.getString("ProductCode"),
+										rs2.getString("ProductType"));
+								parking.setApartmentCode(apartment);
+							}
+						}
 						product = parking;
 					}
 				break;
@@ -301,10 +302,12 @@ public class DatabaseReaderFile {
 						ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM InvoiceProduct WHERE ProductId = ?");
 						ps.setInt(1, productId);
 						ResultSet rs2 = ps.executeQuery();
-						Customer customer = getCustomer(rs2.getInt("CustomerId"));
-						LeaseAgreements lease = new LeaseAgreements(productCode, productType, startDate, endDate, address,
-								customer, pricePerApartment, deposit);
-						product = lease;
+						while (rs2.next()) {
+							Customer customer = getCustomer(rs2.getInt("CustomerId"));
+							LeaseAgreements lease = new LeaseAgreements(productCode, productType, startDate, endDate,
+									address, customer, pricePerApartment, deposit);
+							product = lease;
+						}
 					}
 				break;
 				case "S":
@@ -351,16 +354,21 @@ public class DatabaseReaderFile {
 				ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM InvoiceProduct WHERE InvoiceId = ?");
 				ps.setInt(1, rs.getInt("InvoiceId"));
 				ResultSet rs2 = ps.executeQuery();
-				Customer customer = getCustomer(rs2.getInt("CustomerId"));
-				Person landlord = getPerson(rs.getInt("Realtor"));
+				Customer customer = null;
+				Person landlord = null;
+				while (rs2.next()) {
+					customer = getCustomer(rs2.getInt("CustomerId"));
+					landlord = getPerson(rs.getInt("Realtor"));
+				}
 				//data that requires other queries
 				ArrayList<Product> products = new ArrayList<Product>();
 				ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Product p JOIN InvoiceProduct i "
 						+ "ON i.ProductId = p.ProductId WHERE InvoiceId = ?");
 				ps.setInt(1, invoiceId);
 				rs2 = ps.executeQuery();
-				while (rs.next()) {
-					Product product = getProduct(rs2.getInt("ProductId"), rs2.getString("ProductCode"),
+				Product product = null;
+				while (rs2.next()) {
+					product = getProduct(rs2.getInt("ProductId"), rs2.getString("ProductCode"),
 							rs2.getString("ProductType"));
 					products.add(product);
 				}

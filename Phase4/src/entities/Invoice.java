@@ -187,7 +187,7 @@ public class Invoice {
 /*
  * Takes an array of invoices and prints a summary 
  */
-	public void PrintSummary(ArrayList<Invoice> list) {
+	public void PrintSummary(InvoiceList list) {
 		double subTotal1 = 0;
 		double subTotal2 = 0;
 		double subTotal3 = 0;
@@ -230,7 +230,7 @@ public class Invoice {
 /*
  * Takes an array of invoices and prints out the individual invoices
  */
-	public void PrintInvoices(ArrayList<Invoice> list) {
+	public void PrintInvoices(InvoiceList list) {
 		System.out.println("Individual Invoice Details Report");
 		System.out.println("==================================================");
 		for(Invoice Inv: list) {

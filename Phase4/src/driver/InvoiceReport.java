@@ -19,8 +19,9 @@ public class InvoiceReport{
 		System.out.println(cust);
 		ArrayList<Product> products = db.readProduct();
 		System.out.println(products);
-		InvoiceList list = new InvoiceList();
-		//invoiceList.add()
+		InvoiceList list = db.readInvoices();
+		System.out.println(list);
+		
 		
 
 
@@ -48,7 +49,12 @@ public class InvoiceReport{
 		*/
 		//invoices.get(0).PrintSummary(invoices);
 		//invoices.get(0).PrintInvoices(invoices);
-
+		for(Invoice i: list) {
+			System.out.println(i.getInvoiceCode());
+			System.out.println(i.getInvoiceTotal());
+		}
+		list.getStart().getInvoice().PrintSummary(list);
+		list.getStart().getInvoice().PrintInvoices(list);
 
 		db.closeConnection();
 	}
