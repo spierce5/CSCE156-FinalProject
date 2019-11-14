@@ -18,8 +18,9 @@ public class InvoiceReport{
 		ArrayList<Customer> cust = db.readCustomers();
 		System.out.println(cust);
 		ArrayList<Product> products = db.readProduct();
-		//System.out.println(products);
-		//InvoiceList list = new InvoiceList();
+		System.out.println(products);
+		InvoiceList list = new InvoiceList();
+		//invoiceList.add()
 		
 
 
@@ -45,8 +46,8 @@ public class InvoiceReport{
 			System.out.println(i.getInvoiceCode() + "Total: " + i.getSubtotal(i.getProducts()));
 		}
 		*/
-		invoices.get(0).PrintSummary(invoices);
-		invoices.get(0).PrintInvoices(invoices);
+		//invoices.get(0).PrintSummary(invoices);
+		//invoices.get(0).PrintInvoices(invoices);
 
 
 		db.closeConnection();
