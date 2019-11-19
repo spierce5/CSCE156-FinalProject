@@ -174,6 +174,40 @@ public class InvoiceData {
 	 * 5. Removes all product records from the database
 	 */
 	public static void removeAllProducts() {
+		
+		Connection connect = connectionFactory.getConnection();
+		PreparedStatement ps = null;
+
+		try {
+
+			String query = "DELETE  from InvoiceProduct";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.executeUpdate();
+
+			String query1 = "DELETE from LeaseAgreement";
+			ps = (PreparedStatement) connect.prepareStatement(query1);
+			ps.executeUpdate();
+
+			String query2 = "DELETE from SaleAgreement";
+			ps = (PreparedStatement) connect.prepareStatement(query2);
+			ps.executeUpdate();
+
+			String query3 = "DELETE from Amenity";
+			ps = (PreparedStatement) connect.prepareStatement(query3);
+			ps.executeUpdate();
+
+			String query4 = "DELETE from ParkingPass";
+			ps = (PreparedStatement) connect.prepareStatement(query4);
+			ps.executeUpdate();
+			
+			String query5 = "DELETE from Product";
+			ps = (PreparedStatement) connect.prepareStatement(query5);
+			ps.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			connectionFactory.closeConnection();
+		}
 	}
 
 	/**
