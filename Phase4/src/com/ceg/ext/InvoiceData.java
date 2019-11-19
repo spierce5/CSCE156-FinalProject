@@ -1,5 +1,10 @@
 package com.ceg.ext;
 
+import java.sql.Connection;
+import java.sql.Statement;
+
+import com.mysql.jdbc.PreparedStatement;
+
 /*
  * This is a collection of utility methods that define a general API for
  * interacting with the database supporting this application.
@@ -10,11 +15,15 @@ package com.ceg.ext;
 
 // Odds: Asmita, Evens: Sam
 public class InvoiceData {
+	
 
 	/**
 	 * 1. Method that removes every person record from the database
 	 */
-	public static void removeAllPersons() {}
+	//removing every person record from the database 
+	public static void removeAllPersons() {
+
+	}
 
 	/**
 	 * 2. Method to add a person record to the database with the provided data.
