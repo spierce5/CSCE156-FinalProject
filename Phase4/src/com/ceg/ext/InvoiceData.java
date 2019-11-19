@@ -23,6 +23,9 @@ public class InvoiceData {
 	//removing every person record from the database 
 	public static void removeAllPersons() {
 
+		Connection connect = connectionFactory.getConnection();
+		ps = (PreparedStatement) connect.prepareStatement("DELETE * from Person");
+		
 	}
 
 	/**
