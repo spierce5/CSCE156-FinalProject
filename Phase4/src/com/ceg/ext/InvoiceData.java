@@ -189,7 +189,6 @@ public class InvoiceData {
 			e.printStackTrace();
 			connectionFactory.closeConnection();
 		}
-
 	}
 
 	public static void addCustomer(String customerCode, String customerType, String primaryContactPersonCode,
@@ -303,6 +302,33 @@ public class InvoiceData {
 	 * 8. Adds a ParkingPass record to the database with the provided data.
 	 */
 	public static void addParkingPass(String productCode, double parkingFee) {
+		Connection connect = connectionFactory.getConnection();
+		PreparedStatement ps = null;
+		String query = null;
+		ResultSet rs = null;
+		
+		try {
+			//Inserts new row in Product table
+			query = "INSERT INTO Product (ProductCode, ProductType) VALUES (?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, productCode);
+			ps.setString(2, "P");
+			ps.executeUpdate();
+			rs = ps.getGeneratedKeys();
+			int productId = rs.getInt(1);
+			
+			query = "INSERT INTO ParkingPass (ProductId, ParkingFee, Quantity) VALUES (?,?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setInt(1, productId);
+			ps.setDouble(2, parkingFee);
+			ps.setInt(3, 1);
+			ps.executeUpdate();
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+				connectionFactory.closeConnection();
+			}
+		connectionFactory.closeConnection();
 	}
 
 	/**
@@ -315,6 +341,24 @@ public class InvoiceData {
 	 * 10. Removes all invoice records from the database
 	 */
 	public static void removeAllInvoices() {
+		Connection connect = connectionFactory.getConnection();
+		PreparedStatement ps = null;
+
+		try {
+
+			String query1 = "DELETE from InvoiceProduct";
+			ps = (PreparedStatement) connect.prepareStatement(query1);
+			ps.executeUpdate();
+			
+			String query = "DELETE  from Invoice";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.executeUpdate();
+		}	
+		catch (Exception e) {
+			e.printStackTrace();
+			connectionFactory.closeConnection();
+		}
+		connectionFactory.closeConnection();
 	}
 
 	/**
