@@ -74,6 +74,35 @@ public class InvoiceData {
 	 */
 	public static void addPerson(String personCode, String firstName, String lastName, String street, String city,
 			String state, String zip, String country) {
+		Connection connect = connectionFactory.getConnection();
+		PreparedStatement ps = null;
+		try {
+			String query = "INSERT INTO Address (Street, City, State, Country, Zip) VALUES(?,?,?,?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, street);
+			ps.setString(2, city);
+			ps.setString(3, state);
+			ps.setString(4, country);
+			ps.setString(5, zip);
+			ps.executeUpdate();
+			int addressId = 0;
+			ResultSet rs = ps.getGeneratedKeys();
+			if(rs.next()) {
+				addressId = rs.getInt(1);
+			}
+			query = "INSERT INTO Person (PersonCode, FirstName, LastName, AddressId) VALUES (?,?,?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, personCode);
+			ps.setString(2, firstName);
+			ps.setString(3, lastName);
+			ps.setInt(4, addressId);
+			ps.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			connectionFactory.closeConnection();
+		}
+		connectionFactory.closeConnection();
 	}
 
 	/**
@@ -144,19 +173,18 @@ public class InvoiceData {
 
 		try {
 
-			String query = "DELETE  from Invoice";
-			ps = (PreparedStatement) connect.prepareStatement(query);
-			ps.executeUpdate();
-
 			String query1 = "DELETE from InvoiceProduct";
 			ps = (PreparedStatement) connect.prepareStatement(query1);
+			ps.executeUpdate();
+			
+			String query = "DELETE  from Invoice";
+			ps = (PreparedStatement) connect.prepareStatement(query);
 			ps.executeUpdate();
 
 			String query2 = "DELETE from Customer";
 			ps = (PreparedStatement) connect.prepareStatement(query2);
 			ps.executeUpdate();
 			
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			connectionFactory.closeConnection();
@@ -216,6 +244,52 @@ public class InvoiceData {
 	public static void addSaleAgreement(String productCode, String dateTime, String street, String city, String state,
 			String zip, String country, double totalCost, double downPayment, double monthlyPayment, int payableMonths,
 			double interestRate) {
+		Connection connect = connectionFactory.getConnection();
+		PreparedStatement ps = null;
+		String query = null;
+		ResultSet rs = null;
+		
+		try {
+			//Inserts new row in Product table
+			query = "INSERT INTO Product (ProductCode, ProductType) VALUES (?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, productCode);
+			ps.setString(2, "S");
+			ps.executeUpdate();
+			rs = ps.getGeneratedKeys();
+			int productId = rs.getInt(1);
+			//Inserts new row in Address Table
+			query = "INSERT INTO Address (Street, City, State, Country, Zip) VALUES(?,?,?,?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, street);
+			ps.setString(2, city);
+			ps.setString(3, state);
+			ps.setString(4, country);
+			ps.setString(5, zip);
+			ps.executeUpdate();
+			int addressId = 0;
+			rs = ps.getGeneratedKeys();
+			if(rs.next()) {
+				addressId = rs.getInt(1);
+			}
+			//Inserts new row in SaleAgreement table
+			query = "INSERT INTO SaleAgreement (SaleDate, TotalCost, TotalMonths,"
+					+ " InitialPayment, MonthlyPayment, InterestRate, AddressId, ProductId) VALUES (?,?,?,?,?,?,?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, dateTime);
+			ps.setDouble(2, totalCost);
+			ps.setDouble(3, payableMonths);
+			ps.setDouble(4, downPayment);
+			ps.setDouble(5, monthlyPayment);
+			ps.setDouble(6, interestRate);
+			ps.setDouble(7, addressId);
+			ps.setInt(8, productId);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			connectionFactory.closeConnection();
+		}
+		connectionFactory.closeConnection();
 	}
 
 	/**
