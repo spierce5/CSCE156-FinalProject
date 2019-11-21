@@ -363,25 +363,18 @@ public class DatabaseReaderFile {
 			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {
-				//data that can be gathered from Invoice table alone
+				//data that can be gathered from Invoice table
 				String invoiceCode = rs.getString("InvoiceCode");
 				LocalDate date = LocalDate.parse(rs.getString("InvoiceDate"), dateFormatter);
-				//data that requires InvoiceProduct
-				ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM InvoiceProduct WHERE InvoiceId = ?");
-				ps.setInt(1, rs.getInt("InvoiceId"));
-				ResultSet rs2 = ps.executeQuery();
-				Customer customer = null;
-				Person landlord = null;
-				while (rs2.next()) {
-					customer = getCustomer(rs2.getInt("CustomerId"));
-					landlord = getPerson(rs.getInt("Realtor"));
-				}
+				Customer customer = getCustomer(rs.getInt("CustomerId"));
+				Person landlord = getPerson(rs.getInt("Realtor"));
+				
 				//data that requires other queries
 				ArrayList<Product> products = new ArrayList<Product>();
 				ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Product p JOIN InvoiceProduct i "
 						+ "ON i.ProductId = p.ProductId WHERE InvoiceId = ?");
 				ps.setInt(1, invoiceId);
-				rs2 = ps.executeQuery();
+				ResultSet rs2 = ps.executeQuery();
 				Product product = null;
 				while (rs2.next()) {
 					product = getProduct(rs2.getInt("ProductId"), rs2.getString("ProductCode"),
