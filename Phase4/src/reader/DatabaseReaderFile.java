@@ -305,18 +305,10 @@ public class DatabaseReaderFile {
 						Address address = getAddress(rs.getInt("AddressId"));
 						double pricePerApartment = rs.getDouble("Price");
 						double deposit = rs.getDouble("Deposit");
-						
-						//Obtains customer via InvoiceProduct
-						ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM InvoiceProduct WHERE ProductId = ?");
-						ps.setInt(1, productId);
-						ResultSet rs2 = ps.executeQuery();
-						while (rs2.next()) {
-							Customer customer = getCustomer(rs2.getInt("CustomerId"));
-							LeaseAgreements lease = new LeaseAgreements(productCode, productType, startDate, endDate,
-									address, customer, pricePerApartment, deposit);
-							lease.setQuantity(quantity);
-							product = lease;
-						}
+						LeaseAgreements lease = new LeaseAgreements(productCode, productType, startDate, endDate,
+									address, pricePerApartment, deposit);
+						lease.setQuantity(quantity);
+						product = lease;
 					}
 					ps.close();
 					rs.close();	

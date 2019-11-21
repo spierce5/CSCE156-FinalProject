@@ -135,7 +135,7 @@ public class FlatFileReader {
 				Address leaseAddress = new Address(la);
 				double cost = Double.parseDouble(token[7]);
 				double deposit = Double.parseDouble(token[6]);
-				LeaseAgreements a = new LeaseAgreements(token[0], token[1], leaseStartDate, leaseEndDate, leaseAddress, customerMap.get(token[5]), cost, deposit);
+				LeaseAgreements a = new LeaseAgreements(token[0], token[1], leaseStartDate, leaseEndDate, leaseAddress, cost, deposit);
 				productMap.put(token[0], a);
 				products.add(a);
 				break;

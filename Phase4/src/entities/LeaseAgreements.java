@@ -8,17 +8,16 @@ public class LeaseAgreements extends Product {
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private Address address;
-	private Customer customerName;
+	//private Customer customerName;
 	private double pricePerApartment;
 	private double deposit; 
 
 	public LeaseAgreements(String productCode, String productType, LocalDate startDate, LocalDate endDate,
-			Address address, Customer customerName, double pricePerApartment, double deposit) {
+			Address address, double pricePerApartment, double deposit) {
 		super(productCode, productType);
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.address = address;
-		this.customerName = customerName;
 		this.pricePerApartment = pricePerApartment;
 		this.deposit = deposit;
 	}
@@ -45,14 +44,6 @@ public class LeaseAgreements extends Product {
 
 	public void setAddress(Address address) {
 		this.address = address;
-	}
-
-	public Customer getCustomerName() {
-		return customerName;
-	}
-
-	public void setCustomerName(Customer customerName) {
-		this.customerName = customerName;
 	}
 
 	public double getPricePerApartment() {
