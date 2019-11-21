@@ -2,6 +2,9 @@
 
 
 import java.util.ArrayList;
+
+import com.ceg.ext.InvoiceData;
+
 import entities.*;
 import reader.DatabaseReaderFile;
 import reader.FlatFileReader;
@@ -21,6 +24,9 @@ public class InvoiceReport{
 		System.out.println(products);
 		InvoiceList list = db.readInvoices();
 		System.out.println(list);
+		
+		InvoiceData invData = new InvoiceData();
+		InvoiceData.addEmail("19le", "yrqfbj@gmail.com");
 		
 		
 
@@ -49,12 +55,12 @@ public class InvoiceReport{
 		*/
 		//invoices.get(0).PrintSummary(invoices);
 		//invoices.get(0).PrintInvoices(invoices);
-		for(Invoice i: list) {
-			System.out.println(i.getInvoiceCode());
-			System.out.println(i.getInvoiceTotal());
-		}
-		list.getStart().getInvoice().PrintSummary(list);
-		list.getStart().getInvoice().PrintInvoices(list);
+//		for(Invoice i: list) {
+//			System.out.println(i.getInvoiceCode());
+//			System.out.println(i.getInvoiceTotal());
+//		}
+//		list.getStart().getInvoice().PrintSummary(list);
+//		list.getStart().getInvoice().PrintInvoices(list);
 
 		db.closeConnection();
 	}

@@ -119,9 +119,14 @@ public class InvoiceData {
 		try {
 
 			
-			String query = "SELECT * from Email e join person p where p.PersonId = e. PersonId";
+			String query = "Insert into Email (PersonId, Email) values (?,?)";
+			
+			int getP = getPersonId(personCode);
 			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setInt(1, getP);
+			ps.setString(2, email);
 			ps.executeUpdate();
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -138,6 +143,7 @@ public class InvoiceData {
 		Connection connect = connectionFactory.getConnection();
 		PreparedStatement ps = null;
 		Statement stat = null;
+		int personId = 0;
 		
 		try {
 			
@@ -146,10 +152,7 @@ public class InvoiceData {
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				
-				//fix me: get personId usong person code
-				
-				int personID = rs.getInt("PersonId");
+				personId = rs.getInt("PersonId");
 			}
 
 			
@@ -160,7 +163,7 @@ public class InvoiceData {
 		}
 
 		
-		return null;
+		return personId;
 	}
 	
 
@@ -296,7 +299,51 @@ public class InvoiceData {
 	 */
 	public static void addLeaseAgreement(String productCode, String name, String startDate, String endDate,
 			String street, String city, String state, String zip, String country, double deposit, double monthlyCost) {
-	}
+		
+		Connection connect = connectionFactory.getConnection();
+		PreparedStatement ps = null;
+		String query = null;
+		ResultSet rs = null;
+		
+		try {
+			//Inserts new row in Product table
+			query = "INSERT INTO Product (ProductCode, ProductType) VALUES (?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, productCode);
+			ps.setString(2, "L");
+			ps.executeUpdate();
+			rs = ps.getGeneratedKeys();
+			int productId = rs.getInt(1);
+			//Inserts new row in Address Table
+			query = "INSERT INTO Address (Street, City, State, Country, Zip) VALUES(?,?,?,?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, street);
+			ps.setString(2, city);
+			ps.setString(3, state);
+			ps.setString(4, country);
+			ps.setString(5, zip);
+			ps.executeUpdate();
+			int addressId = 0;
+			rs = ps.getGeneratedKeys();
+			if(rs.next()) {
+				addressId = rs.getInt(1);
+			}
+			query = "INSERT INTO LeaseAgreement (startDate, endDate,"
+					+ " Price, Deposit, AddressId, ProductId) VALUES (?,?,?,?,?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, startDate);
+			ps.setString(2, endDate);
+			ps.setDouble(3, monthlyCost);
+			ps.setDouble(4, deposit);
+			ps.setInt(5, addressId);
+			ps.setInt(6, productId);
+		}catch (Exception e) {
+				e.printStackTrace();
+				connectionFactory.closeConnection();
+			}
+			connectionFactory.closeConnection();
+		}
+	
 
 	/**
 	 * 8. Adds a ParkingPass record to the database with the provided data.
@@ -335,6 +382,37 @@ public class InvoiceData {
 	 * 9. Adds an Amenity record to the database with the provided data.
 	 */
 	public static void addAmenity(String productCode, String name, double cost) {
+		
+		Connection connect = connectionFactory.getConnection();
+		PreparedStatement ps = null;
+		String query = null;
+		ResultSet rs = null;
+		
+		try {
+			//Inserts new row in Product table
+			query = "INSERT INTO Product (ProductCode, ProductType) VALUES (?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, productCode);
+			ps.setString(2, "A");
+			ps.executeUpdate();
+			rs = ps.getGeneratedKeys();
+			int productId = rs.getInt(1);
+			
+			query = "INSERT INTO ParkingPass (ProductId, Quantity, Price) VALUES (?,?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setInt(1, productId);
+			//in sql it is different
+			ps.setString(2, name);
+			ps.setDouble(3, cost);
+			ps.executeUpdate();
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+				connectionFactory.closeConnection();
+			}
+		connectionFactory.closeConnection();
+	
+		
 	}
 
 	/**
