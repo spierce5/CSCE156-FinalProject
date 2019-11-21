@@ -15,16 +15,18 @@ public class InvoiceReport {
 		DatabaseReaderFile db = new DatabaseReaderFile();
 		db.ConnectionToJdbc();
 		
-		
-		ArrayList<Person> person = db.readPersons();
-		ArrayList<Customer> cust = db.readCustomers();
-		ArrayList<Product> products = db.readProduct();
+		//to print all methods 
+		FlatFileReader fr = new FlatFileReader();
+		ArrayList<Person> person = fr.readPerson();
+		ArrayList<Customer> customers = fr.readCustomers();
+		ArrayList<Product> products = fr.readProduct();
 		InvoiceList list = db.readInvoices();
-
+		
+		//to get the summary and invoices
 		list.getStart().getInvoice().PrintSummary(list);
 		list.getStart().getInvoice().PrintInvoices(list);
-		
-	
+
+
 		db.closeConnection();
 	}
 }
