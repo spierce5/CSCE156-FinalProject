@@ -247,8 +247,14 @@ public class DatabaseReaderFile {
 		Product product = null;
 		try {
 			ResultSet rs;
-			int quantity;
-
+			int quantity = 1;
+			ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Product WHERE ProductId = ?");
+			ps.setInt(1, productId);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				quantity = rs.getInt("Quantity");
+			}
+			
 			switch(productType) {
 				case "A":
 					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM Amenity WHERE ProductId = ?");
@@ -257,19 +263,19 @@ public class DatabaseReaderFile {
 					while (rs.next()) {
 						double price = rs.getDouble("Price");
 						String description = rs.getString("Description");
-						quantity = rs.getInt("Quantity");
 						Amenity amenity = new Amenity(productCode, productType, description, price);
 						amenity.setQuantity(quantity);
 						product = amenity;
 					}
-				break;
+					ps.close();
+					rs.close();
+					break;
 				case "P":
 					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM ParkingPass WHERE ProductId = ?");
 					ps.setInt(1, productId);
 					rs = ps.executeQuery();
 					while (rs.next()) {
 						double parkingFee = rs.getDouble("ParkingFee"); 
-						quantity = rs.getInt("Quantity");
 						ParkingPass parking = new ParkingPass(productCode, productType, parkingFee);
 						parking.setQuantity(quantity);
 						if(rs.getString("LeaseCode") != null) {
@@ -286,7 +292,9 @@ public class DatabaseReaderFile {
 						}
 						product = parking;
 					}
-				break;
+					ps.close();
+					rs.close();
+					break;
 				case "L":
 					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM LeaseAgreement WHERE ProductId = ?");
 					ps.setInt(1, productId);
@@ -306,10 +314,13 @@ public class DatabaseReaderFile {
 							Customer customer = getCustomer(rs2.getInt("CustomerId"));
 							LeaseAgreements lease = new LeaseAgreements(productCode, productType, startDate, endDate,
 									address, customer, pricePerApartment, deposit);
+							lease.setQuantity(quantity);
 							product = lease;
 						}
 					}
-				break;
+					ps.close();
+					rs.close();	
+					break;
 				case "S":
 					ps = (PreparedStatement) connect.prepareStatement("SELECT * FROM SaleAgreement WHERE ProductId = ?");
 					ps.setInt(1, productId);
@@ -324,11 +335,16 @@ public class DatabaseReaderFile {
 						double interestRate = rs.getDouble("InterestRate");
 						SaleAgreements sale = new SaleAgreements(productCode, productType, date, address1, totalCost,
 								initialPayment, monthlyPayment, totalMonths, interestRate);
+						sale.setQuantity(quantity);
 						product = sale;
-				}
-				break;
+					}
+					ps.close();
+					rs.close();
+					break;
 				default:
 					System.err.println("Product Type Not Found");
+					ps.close();
+					rs.close();
 					break;
 			}
 		} catch (Exception e) {

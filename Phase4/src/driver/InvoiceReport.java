@@ -50,8 +50,8 @@ public class InvoiceReport {
 //			System.out.println(i.getInvoiceCode());
 //			System.out.println(i.getInvoiceTotal());
 //		}
-//		list.getStart().getInvoice().PrintSummary(list);
-//		list.getStart().getInvoice().PrintInvoices(list);
+		list.getStart().getInvoice().PrintSummary(list);
+		list.getStart().getInvoice().PrintInvoices(list);
 
 		db.closeConnection();
 	}

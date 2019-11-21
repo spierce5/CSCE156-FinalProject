@@ -538,6 +538,32 @@ public class InvoiceData {
 	 */
 
 	public static void addSaleAgreementToInvoice(String invoiceCode, String productCode, int quantity) {
+		
+		try {
+			Connection connect = connectionFactory.getConnection();
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			String query = "SELECT * FROM Product WHERE ProductCode = ?";
+			
+			//Retrieve ProductId from product table
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, productCode);
+			rs = ps.executeQuery();
+			int productId = rs.getInt("ProductId");
+			//Retrieve SaleAgreement from table
+			query = "SELECT * FROM SaleAgreement WHERE ProductId = ?";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setInt(1, productId);
+			rs = ps.executeQuery();
+			//Add SaleAgreement to Invoice
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			connectionFactory.closeConnection();
+		}
+		connectionFactory.closeConnection();
 	}
 
 	/**
