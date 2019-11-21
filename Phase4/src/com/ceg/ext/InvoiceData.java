@@ -233,6 +233,7 @@ public class InvoiceData {
 			ps.setString(4, primaryContactPersonCode);
 			ps.setInt(5, getPersonId(primaryContactPersonCode));
 			ps.setInt(6, addressId);
+			ps.executeUpdate();
 			
 		}catch (Exception e) {
 				e.printStackTrace();
