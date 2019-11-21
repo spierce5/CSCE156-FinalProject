@@ -328,8 +328,9 @@ public class InvoiceData {
 			if(rs.next()) {
 				addressId = rs.getInt(1);
 			}
+			
 			query = "INSERT INTO LeaseAgreement (startDate, endDate,"
-					+ " Price, Deposit, AddressId, ProductId) VALUES (?,?,?,?,?,?)";
+					+ " Price, Deposit, AddressId, ProductId, CustomerId) VALUES (?,?,?,?,?,?,?)";
 			ps = (PreparedStatement) connect.prepareStatement(query);
 			ps.setString(1, startDate);
 			ps.setString(2, endDate);
@@ -337,12 +338,42 @@ public class InvoiceData {
 			ps.setDouble(4, deposit);
 			ps.setInt(5, addressId);
 			ps.setInt(6, productId);
+			ps.setInt(7, getCustomerId(name));
 		}catch (Exception e) {
 				e.printStackTrace();
 				connectionFactory.closeConnection();
 			}
 			connectionFactory.closeConnection();
 		}
+	
+	public static int getCustomerId(String name) {
+		
+		String query = "Select CustomerId from Customer where ClientName = ?";
+		Connection connect = connectionFactory.getConnection();
+		PreparedStatement ps = null;
+		
+		int CustomerId = 0;
+		
+		try {
+			
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, name);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				CustomerId = rs.getInt("CustomerId");
+			}
+
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			connectionFactory.closeConnection();
+
+		}
+
+		
+		return CustomerId;
+	}
 	
 
 	/**
@@ -443,6 +474,52 @@ public class InvoiceData {
 	 * 11. Adds an invoice record to the database with the given data.
 	 */
 	public static void addInvoice(String invoiceCode, String customerCode, String realtorCode, String invoiceDate) {
+		
+		Connection connect = connectionFactory.getConnection();
+		PreparedStatement ps = null;
+
+		try {
+
+			String query = "Insert into Invoice (InvoiceId, Email) values (?,?)";
+			int getI = getInvoiceId(invoiceCode);
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setInt(1, getI);
+			ps.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+			connectionFactory.closeConnection();
+
+		}
+		
+	}
+	
+	//method that returns invoiceId taking invoice code
+	public static int getInvoiceId(String invoiceCode) {
+		
+		String query = "Select PersonId from Person where personCode = ?";
+		Connection connect = connectionFactory.getConnection();
+		PreparedStatement ps = null;
+		Statement stat = null;
+		int invoiceId = 0;
+		
+		try {
+			
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, invoiceCode);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				invoiceId = rs.getInt("InvoiceId");
+			}
+
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			connectionFactory.closeConnection();
+
+		}
+
+		return invoiceId;
 	}
 
 	/**
