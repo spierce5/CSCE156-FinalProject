@@ -235,7 +235,6 @@ public class Invoice {
 		System.out.println("==================================================");
 		for(Invoice Inv: list) {
 			String customerType = null;
-			apartmentAssociation = false;
 			if(Inv.getCustomer().isLowIncome()) {			//Printable version of customer type
 				customerType = "[Low-Income]";
 			}
@@ -244,6 +243,7 @@ public class Invoice {
 			}
 			System.out.println("Invoice" + Inv.getInvoiceCode());
 			System.out.println("========================");					//General Information
+			System.out.println("Date: " + Inv.getDate().toString());
 			System.out.println("Realtor: " + Inv.getLandlord().getFullName());
 			System.out.println("Customer Info:\n " + Inv.getCustomer().getName() + "\n " +
 			customerType + "\n " + Inv.getCustomer().getContact().getFullName() + "\n " + 
@@ -332,6 +332,7 @@ public class Invoice {
 				System.out.println(String.format("%-105s %-15.2f", "Additional Fee (Low-Income)", 50.75));
 			}
 			System.out.println(String.format("%-105s %-15.2f", "Total", Inv.totalAfterDiscount(Inv.getProducts(), Inv.getCustomer())));
+			System.out.println("\n\n\t\t\t\t End of Invoice \n");
 		}	
 	}
 }

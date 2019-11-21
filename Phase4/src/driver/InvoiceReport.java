@@ -16,13 +16,9 @@ public class InvoiceReport {
 		db.ConnectionToJdbc();
 		// to print person method
 		ArrayList<Person> person = db.readPersons();
-		System.out.println(person);
 		ArrayList<Customer> cust = db.readCustomers();
-		System.out.println(cust);
 		ArrayList<Product> products = db.readProduct();
-		System.out.println(products);
 		InvoiceList list = db.readInvoices();
-		System.out.println(list);
 
 		InvoiceData invData = new InvoiceData();
 		InvoiceData.addLeaseAgreement("wvg2", "asmi", "2017-01-13", "2018-01-12", "abcd Street", "Lincoln", "NE", "36398",
