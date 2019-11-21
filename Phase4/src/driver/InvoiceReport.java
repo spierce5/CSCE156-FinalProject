@@ -50,7 +50,7 @@ public class InvoiceReport {
 		//list.getStart().getInvoice().PrintSummary(list);
 		//list.getStart().getInvoice().PrintInvoices(list);
 		
-		
+		InvoiceData.removeAllPersons();
 
 		db.closeConnection();
 	}

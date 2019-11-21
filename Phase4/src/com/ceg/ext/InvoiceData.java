@@ -33,21 +33,17 @@ public class InvoiceData {
 			String query = "DELETE  from InvoiceProduct";
 			ps = (PreparedStatement) connect.prepareStatement(query);
 			ps.executeUpdate();
-
-			String query1 = "DELETE from Product";
-			ps = (PreparedStatement) connect.prepareStatement(query1);
+			
+			String query4 = "DELETE from Invoice";
+			ps = (PreparedStatement) connect.prepareStatement(query4);
 			ps.executeUpdate();
-
-			String query2 = "DELETE from Email";
-			ps = (PreparedStatement) connect.prepareStatement(query2);
-			ps.executeUpdate();
-
+			
 			String query3 = "DELETE from Customer";
 			ps = (PreparedStatement) connect.prepareStatement(query3);
 			ps.executeUpdate();
 
-			String query4 = "DELETE from Invoice";
-			ps = (PreparedStatement) connect.prepareStatement(query4);
+			String query2 = "DELETE from Email";
+			ps = (PreparedStatement) connect.prepareStatement(query2);
 			ps.executeUpdate();
 			
 			String query5 = "DELETE from Person";
