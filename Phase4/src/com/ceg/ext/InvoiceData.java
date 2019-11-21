@@ -543,22 +543,35 @@ public class InvoiceData {
 			Connection connect = connectionFactory.getConnection();
 			PreparedStatement ps = null;
 			ResultSet rs = null;
-			String query = "SELECT * FROM Product WHERE ProductCode = ?";
+			String query = "SELECT ProductId FROM Product WHERE ProductCode = ?";
 			
 			//Retrieve ProductId from product table
 			ps = (PreparedStatement) connect.prepareStatement(query);
 			ps.setString(1, productCode);
 			rs = ps.executeQuery();
-			int productId = rs.getInt("ProductId");
-			//Retrieve SaleAgreement from table
-			query = "SELECT * FROM SaleAgreement WHERE ProductId = ?";
+			int productId = 0;
+			if(rs.next()) {
+				rs.getInt("ProductId");
+			}
+			
+			//Retrieve InvoiceId from Invoice table
+			query = "SELECT * FROM Invoice WHERE InvoiceCode = ?";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, invoiceCode);
+			rs = ps.executeQuery();
+			int invoiceId = 0;
+			if(rs.next()) {
+				invoiceId = rs.getInt("InvoiceId");
+			}
+			//Insert row into InvoiceProduct table
+			query = "INSERT INTO InvoiceProduct (ProductId, InvoiceId) VALUES (?,?)";
 			ps = (PreparedStatement) connect.prepareStatement(query);
 			ps.setInt(1, productId);
-			rs = ps.executeQuery();
-			//Add SaleAgreement to Invoice
+			ps.setInt(2, invoiceId);
+			ps.executeUpdate();
 			
-			
-			
+			ps.close();
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			connectionFactory.closeConnection();
