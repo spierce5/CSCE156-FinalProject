@@ -350,22 +350,21 @@ public class InvoiceData {
 		try {
 			//Inserts new row in Product table
 			query = "INSERT INTO Product (ProductCode, ProductType) VALUES (?,?)";
-			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps = (PreparedStatement) connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, productCode);
 			ps.setString(2, "L");
 			ps.executeUpdate();
 			
 			
 			//get the product id of the product we just inserted so we can insert into the lease table
-			ps = (PreparedStatement) connect.prepareStatement("SELECT LAST_INSERT_ID()");
-			rs = ps.executeQuery();
-			
-			rs.next();
-			int productId = rs.getInt("LAST_INSERT_ID()");
-
+			rs = ps.getGeneratedKeys();
+			int productId = 0;
+			if(rs.next()) {
+				productId = rs.getInt(1);
+			}
 			//Inserts new row in Address Table
 			query = "INSERT INTO Address (Street, City, State, Country, Zip) VALUES(?,?,?,?,?)";
-			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps = (PreparedStatement) connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, street);
 			ps.setString(2, city);
 			ps.setString(3, state);
@@ -373,21 +372,13 @@ public class InvoiceData {
 			ps.setString(5, zip);
 			ps.executeUpdate();
 			int addressId = 0;
-
-			if(rs.next()) {
-				
-				//for address too
+			rs = ps.getGeneratedKeys();
+			if(rs.next()) {		//for address too
 				addressId = rs.getInt(1);
 			}
-			
-			ps = (PreparedStatement) connect.prepareStatement("SELECT LAST_INSERT_ID()");
-			rs = ps.executeQuery();
-			
-			rs.next();
-		    productId = rs.getInt("LAST_INSERT_ID()");
-			
-			query = "INSERT INTO LeaseAgreement (startDate, endDate,"
-					+ " Price, Deposit, AddressId, ProductId, CustomerId) VALUES (?,?,?,?,?,?,?)";
+			//Insert new row into LeaseAgreement table
+			query = "INSERT INTO LeaseAgreement (StartDate, EndDate,"
+					+ " Price, Deposit, AddressId, ProductId) VALUES (?,?,?,?,?,?)";
 			ps = (PreparedStatement) connect.prepareStatement(query);
 			ps.setString(1, startDate);
 			ps.setString(2, endDate);
@@ -395,7 +386,7 @@ public class InvoiceData {
 			ps.setDouble(4, deposit);
 			ps.setInt(5, addressId);
 			ps.setInt(6, productId);
-			ps.setInt(7, getCustomerId(name));
+			ps.executeUpdate();
 		}catch (Exception e) {
 				e.printStackTrace();
 				connectionFactory.closeConnection();
@@ -431,7 +422,6 @@ public class InvoiceData {
 		
 		return CustomerId;
 	}
-	
 
 	/**
 	 * 8. Adds a ParkingPass record to the database with the provided data.

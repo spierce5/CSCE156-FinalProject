@@ -50,8 +50,8 @@ public class InvoiceReport {
 		//list.getStart().getInvoice().PrintSummary(list);
 		//list.getStart().getInvoice().PrintInvoices(list);
 		
-		InvoiceData.removeAllPersons();
-
+		InvoiceData.addLeaseAgreement("jsdf", "aflak", "2017-01-01", "2018-01-01",
+				"Rover", "Gotham", "WV", "09999", "Canada", 515.0, 5.0);
 		db.closeConnection();
 	}
 }
