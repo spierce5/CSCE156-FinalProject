@@ -78,7 +78,7 @@ public class InvoiceData {
 		PreparedStatement ps = null;
 		try {
 			String query = "INSERT INTO Address (Street, City, State, Country, Zip) VALUES(?,?,?,?,?)";
-			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps = (PreparedStatement) connect.prepareStatement(query,  Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, street);
 			ps.setString(2, city);
 			ps.setString(3, state);
@@ -254,15 +254,18 @@ public class InvoiceData {
 		try {
 			//Inserts new row in Product table
 			query = "INSERT INTO Product (ProductCode, ProductType) VALUES (?,?)";
-			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps = (PreparedStatement) connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, productCode);
 			ps.setString(2, "S");
 			ps.executeUpdate();
 			rs = ps.getGeneratedKeys();
-			int productId = rs.getInt(1);
+			int productId = 0;
+			if(rs.next()) {
+				productId = rs.getInt(1);
+			}
 			//Inserts new row in Address Table
 			query = "INSERT INTO Address (Street, City, State, Country, Zip) VALUES(?,?,?,?,?)";
-			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps = (PreparedStatement) connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, street);
 			ps.setString(2, city);
 			ps.setString(3, state);
@@ -286,6 +289,7 @@ public class InvoiceData {
 			ps.setDouble(6, interestRate);
 			ps.setDouble(7, addressId);
 			ps.setInt(8, productId);
+			ps.executeUpdate();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -395,20 +399,23 @@ public class InvoiceData {
 		ResultSet rs = null;
 		
 		try {
-			//Inserts new row in Product table
-			query = "INSERT INTO Product (ProductCode, ProductType) VALUES (?,?)";
-			ps = (PreparedStatement) connect.prepareStatement(query);
+			//Inserts new row into Product table
+			query = "INSERT INTO Product (ProductCode, ProductType, Quantity) VALUES (?,?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, productCode);
 			ps.setString(2, "P");
+			ps.setInt(3, 1);
 			ps.executeUpdate();
 			rs = ps.getGeneratedKeys();
-			int productId = rs.getInt(1);
-			
-			query = "INSERT INTO ParkingPass (ProductId, ParkingFee, Quantity) VALUES (?,?,?)";
+			int productId = 0;
+			if(rs.next()) {
+				productId = rs.getInt(1);
+			}
+			//Inserts new row into ParkingPass
+			query = "INSERT INTO ParkingPass (ProductId, ParkingFee) VALUES (?,?)";
 			ps = (PreparedStatement) connect.prepareStatement(query);
 			ps.setInt(1, productId);
 			ps.setDouble(2, parkingFee);
-			ps.setInt(3, 1);
 			ps.executeUpdate();
 		}
 		catch (Exception e) {
@@ -543,16 +550,22 @@ public class InvoiceData {
 			Connection connect = connectionFactory.getConnection();
 			PreparedStatement ps = null;
 			ResultSet rs = null;
-			String query = "SELECT * FROM Product WHERE ProductCode = ?";
 			
 			//Retrieve ProductId from product table
+			String query = "SELECT * FROM Product WHERE ProductCode = ?";
 			ps = (PreparedStatement) connect.prepareStatement(query);
 			ps.setString(1, productCode);
 			rs = ps.executeQuery();
 			int productId = 0;
 			if(rs.next()) {
-				rs.getInt("ProductId");
+				productId = rs.getInt("ProductId");
 			}
+			//Update quantity
+			query = "UPDATE Product SET Quantity = ? WHERE ProductId = ?";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setInt(1, quantity);
+			ps.setInt(2, productId);
+			ps.executeUpdate();
 			
 			//Retrieve InvoiceId from Invoice table
 			query = "SELECT * FROM Invoice WHERE InvoiceCode = ?";
@@ -607,6 +620,18 @@ public class InvoiceData {
 			if(rs.next()) {
 				productId = rs.getInt("ProductId");
 			}
+			//Update Quantity
+			query = "UPDATE Product SET Quantity = ? WHERE ProductId = ?";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setInt(1, quantity);
+			ps.setInt(2, productId);
+			ps.executeUpdate();
+			//Update LeaseCode
+			query = "UPDATE ParkingPass SET LeaseCode = ? WHERE ProductId = ?";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, agreementCode);
+			ps.setInt(2, productId);
+			ps.executeUpdate();
 			//Retrieve InvoiceId
 			int invoiceId = 0;
 			query = "SELECT * FROM Invoice WHERE Invoicecode = ?";

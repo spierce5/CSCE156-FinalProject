@@ -15,9 +15,9 @@ public class connectionFactory {
 	PreparedStatement ps = null;
 
 	static final String driverJDBC = "com.mysql.jdbc.Driver";
-	static final String url = "jdbc:mysql://cse.unl.edu/ajayswal"; // jdbc:mysql://cse.unl.edu/ajayswal
-	static final String username = "ajayswal"; // ajayswal
-	static final String password = "Shivbaba98853#"; // Shivbaba98853#
+	static final String url = "jdbc:mysql://cse.unl.edu/spierce"; // jdbc:mysql://cse.unl.edu/ajayswal
+	static final String username = "spierce"; // ajayswal
+	static final String password = "pa4hUY"; // Shivbaba98853#
 
 	// method to connect to JDBC and checking for errors
 	public static Connection getConnection() {
