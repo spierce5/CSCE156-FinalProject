@@ -194,10 +194,52 @@ public class InvoiceData {
 		}
 	}
 
+	//adding customers
 	public static void addCustomer(String customerCode, String customerType, String primaryContactPersonCode,
 			String name, String street, String city, String state, String zip, String country) {
 		
-		
+		Connection connect = connectionFactory.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+	
+			ps = (PreparedStatement) connect.prepareStatement("SELECT LAST_INSERT_ID()");
+			rs = ps.executeQuery();
+			
+			rs.next();
+		    int customerId = rs.getInt("LAST_INSERT_ID()");
+		    
+		  //Inserts new row in Address Table
+			String query = "INSERT INTO Address (Street, City, State, Country, Zip) VALUES(?,?,?,?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, street);
+			ps.setString(2, city);
+			ps.setString(3, state);
+			ps.setString(4, country);
+			ps.setString(5, zip);
+			ps.executeUpdate();
+			int addressId = 0;
+			rs = ps.getGeneratedKeys();
+			if(rs.next()) {
+				addressId = rs.getInt(1);
+			}
+			
+			query = "INSERT INTO Customer (CustomerId, CustomerCode,"
+					+ " CustomerType, ClientName, PersonId, AddressId) VALUES (?,?,?,?,?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setInt(1, customerId);
+			ps.setString(2, customerCode);
+			ps.setString(3, customerType);
+			ps.setString(4, primaryContactPersonCode);
+			ps.setInt(5, getPersonId(primaryContactPersonCode));
+			ps.setInt(6, addressId);
+			ps.executeUpdate();
+			
+		}catch (Exception e) {
+				e.printStackTrace();
+				connectionFactory.closeConnection();
+		}
+	
 	}
 
 	/**
@@ -342,6 +384,12 @@ public class InvoiceData {
 				addressId = rs.getInt(1);
 			}
 			
+			ps = (PreparedStatement) connect.prepareStatement("SELECT LAST_INSERT_ID()");
+			rs = ps.executeQuery();
+			
+			rs.next();
+		    productId = rs.getInt("LAST_INSERT_ID()");
+			
 			query = "INSERT INTO LeaseAgreement (startDate, endDate,"
 					+ " Price, Deposit, AddressId, ProductId, CustomerId) VALUES (?,?,?,?,?,?,?)";
 			ps = (PreparedStatement) connect.prepareStatement(query);
@@ -424,7 +472,6 @@ public class InvoiceData {
 			}
 		connectionFactory.closeConnection();
 	}
-
 	/**
 	 * 9. Adds an Amenity record to the database with the provided data.
 	 */
@@ -442,13 +489,15 @@ public class InvoiceData {
 			ps.setString(1, productCode);
 			ps.setString(2, "A");
 			ps.executeUpdate();
-			rs = ps.getGeneratedKeys();
-			int productId = rs.getInt(1);
+			//to get the last inserted input
+			ps = (PreparedStatement) connect.prepareStatement("SELECT LAST_INSERT_ID()");
+			rs = ps.executeQuery();
+			rs.next();
+			int productId = rs.getInt("LAST_INSERT_ID()");
 			
 			query = "INSERT INTO ParkingPass (ProductId, Quantity, Price) VALUES (?,?,?)";
 			ps = (PreparedStatement) connect.prepareStatement(query);
 			ps.setInt(1, productId);
-			//in sql it is different
 			ps.setString(2, name);
 			ps.setDouble(3, cost);
 			ps.executeUpdate();
@@ -496,10 +545,19 @@ public class InvoiceData {
 
 		try {
 
-			String query = "Insert into Invoice (InvoiceId, Email) values (?,?)";
+			String query = "Insert into Invoice (InvoiceId, InvoiceCode, InvoiceDate, Realtor, CustomerId) values (?,?,?,?,?)";
+			
 			int getI = getInvoiceId(invoiceCode);
 			ps = (PreparedStatement) connect.prepareStatement(query);
 			ps.setInt(1, getI);
+			ps.setString(2, invoiceCode);
+			ps.setString(3, invoiceDate);
+			//TODO: realtor/ RealtorCode
+			ps.setString(4, realtorCode);
+			ps.setInt(5, getCustomerId(customerCode));
+			ps.executeUpdate();
+
+			
 			ps.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -508,6 +566,7 @@ public class InvoiceData {
 		}
 		
 	}
+	
 	
 	//method that returns invoiceId taking invoice code
 	public static int getInvoiceId(String invoiceCode) {
@@ -598,6 +657,45 @@ public class InvoiceData {
 	 * <code>invoiceCode</code> with the given begin/end dates
 	 */
 	public static void addLeaseAgreementToInvoice(String invoiceCode, String productCode, int quantity) {
+		try {
+			Connection connect = connectionFactory.getConnection();
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			String query = "SELECT * FROM Product WHERE ProductCode = ?";
+			
+			//Retrieve ProductId from product table
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, productCode);
+			rs = ps.executeQuery();
+			int productId = 0;
+			if(rs.next()) {
+				rs.getInt("ProductId");
+			}
+			
+			//Retrieve InvoiceId from Invoice table
+			query = "SELECT * FROM Invoice WHERE InvoiceCode = ?";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, invoiceCode);
+			rs = ps.executeQuery();
+			int invoiceId = 0;
+			if(rs.next()) {
+				invoiceId = rs.getInt("InvoiceId");
+			}
+			//Insert row into InvoiceProduct table
+			query = "INSERT INTO InvoiceProduct (ProductId, InvoiceId) VALUES (?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setInt(1, productId);
+			ps.setInt(2, invoiceId);
+			ps.executeUpdate();
+			
+			ps.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			connectionFactory.closeConnection();
+		}
+		connectionFactory.closeConnection();
+	
 	}
 
 	/**
@@ -663,6 +761,42 @@ public class InvoiceData {
 	 * given number of quantity.
 	 */
 	public static void addAmenityToInvoice(String invoiceCode, String productCode, int quantity) {
+		try {
+			Connection connect = connectionFactory.getConnection();
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			//Retrieve ProductId
+			int productId = 0;
+			String query = "SELECT * FROM Product WHERE ProductCode = ?";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, productCode);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				productId = rs.getInt("ProductId");
+			}
+			//Retrieve InvoiceId
+			int invoiceId = 0;
+			query = "SELECT * FROM Invoice WHERE Invoicecode = ?";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, invoiceCode);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				invoiceId = rs.getInt("InvoiceId");
+			}
+			//Insert into InvoiceProduct
+			query = "INSERT INTO InvoiceProduct (InvoiceId, ProductId) VALUES (?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setInt(1, invoiceId);
+			ps.setInt(2, productId);
+			ps.executeUpdate();
+		
+			ps.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			connectionFactory.closeConnection();
+		}
+		connectionFactory.closeConnection();
 	}
 
 }
