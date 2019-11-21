@@ -543,7 +543,7 @@ public class InvoiceData {
 			Connection connect = connectionFactory.getConnection();
 			PreparedStatement ps = null;
 			ResultSet rs = null;
-			String query = "SELECT ProductId FROM Product WHERE ProductCode = ?";
+			String query = "SELECT * FROM Product WHERE ProductCode = ?";
 			
 			//Retrieve ProductId from product table
 			ps = (PreparedStatement) connect.prepareStatement(query);
@@ -594,6 +594,42 @@ public class InvoiceData {
 	 */
 	public static void addParkingPassToInvoice(String invoiceCode, String productCode, int quantity,
 			String agreementCode) {
+		try {
+			Connection connect = connectionFactory.getConnection();
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			//Retrieve ProductId
+			int productId = 0;
+			String query = "SELECT * FROM Product WHERE ProductCode = ?";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, productCode);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				productId = rs.getInt("ProductId");
+			}
+			//Retrieve InvoiceId
+			int invoiceId = 0;
+			query = "SELECT * FROM Invoice WHERE Invoicecode = ?";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setString(1, invoiceCode);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				invoiceId = rs.getInt("InvoiceId");
+			}
+			//Insert into InvoiceProduct
+			query = "INSERT INTO InvoiceProduct (InvoiceId, ProductId) VALUES (?,?)";
+			ps = (PreparedStatement) connect.prepareStatement(query);
+			ps.setInt(1, invoiceId);
+			ps.setInt(2, productId);
+			ps.executeUpdate();
+		
+			ps.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			connectionFactory.closeConnection();
+		}
+		connectionFactory.closeConnection();
 	}
 
 	/**
