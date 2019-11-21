@@ -481,11 +481,11 @@ public class InvoiceData {
 			rs.next();
 			int productId = rs.getInt("LAST_INSERT_ID()");
 			
-			query = "INSERT INTO ParkingPass (ProductId, Quantity, Price) VALUES (?,?,?)";
+			query = "INSERT INTO Amenity (ProductId, Price, Description) VALUES (?,?,?)";
 			ps = (PreparedStatement) connect.prepareStatement(query);
 			ps.setInt(1, productId);
-			ps.setString(2, name);
-			ps.setDouble(3, cost);
+			ps.setString(3, name);
+			ps.setDouble(2, cost);
 			ps.executeUpdate();
 		}
 		catch (Exception e) {
