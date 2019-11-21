@@ -312,8 +312,15 @@ public class InvoiceData {
 			ps.setString(1, productCode);
 			ps.setString(2, "L");
 			ps.executeUpdate();
-			rs = ps.getGeneratedKeys();
-			int productId = rs.getInt(1);
+			
+			
+			//get the product id of the product we just inserted so we can insert into the lease table
+			ps = (PreparedStatement) connect.prepareStatement("SELECT LAST_INSERT_ID()");
+			rs = ps.executeQuery();
+			
+			rs.next();
+			int productId = rs.getInt("LAST_INSERT_ID()");
+
 			//Inserts new row in Address Table
 			query = "INSERT INTO Address (Street, City, State, Country, Zip) VALUES(?,?,?,?,?)";
 			ps = (PreparedStatement) connect.prepareStatement(query);
@@ -324,8 +331,10 @@ public class InvoiceData {
 			ps.setString(5, zip);
 			ps.executeUpdate();
 			int addressId = 0;
-			rs = ps.getGeneratedKeys();
+
 			if(rs.next()) {
+				
+				//for address too
 				addressId = rs.getInt(1);
 			}
 			

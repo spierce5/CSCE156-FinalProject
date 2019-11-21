@@ -25,7 +25,7 @@ public class InvoiceReport {
 		System.out.println(list);
 
 		InvoiceData invData = new InvoiceData();
-		invData.addLeaseAgreement("wvg2", "asmi", "2017-01-13", "2018-01-12", "abcd Street", "Lincoln", "NE", "36398",
+		InvoiceData.addLeaseAgreement("wvg2", "asmi", "2017-01-13", "2018-01-12", "abcd Street", "Lincoln", "NE", "36398",
 				"USA", 9087, 15890);
 
 		/*
